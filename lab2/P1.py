@@ -47,8 +47,8 @@ class RecordBST:
             id, nombre, cantidad_vendida, precio_unitario, fecha, left, right = unpacked_record_data
 
             while True:
-                print("hola")
-                return
+                if record.id 
+
 
 
     def search(self, key):
