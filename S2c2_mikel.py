@@ -1,4 +1,5 @@
 import struct
+import os
 
 class Venta:
     def __init__(self, id, nombre, cantidad_vendida, precio, fecha):
@@ -19,13 +20,11 @@ class BST:
 
     def __init__(self, filename):
         self.filename = filename
-        with open(filename, "a+b") as file:
-            ""
 
     def insert(self, record):
         with open(self.filename, "a+b") as file:
             file.write(struct.pack(self.FORMAT, record.id, record.nombre.encode(), record.cantidad_vendida, record.precio, record.fecha.encode(), record.left, record.right))
-            pos = (int)(file.tell() / self.RECORD_SIZE) + 1
+            pos = (int)(file.tell() / self.RECORD_SIZE)
             if pos == 1:
                 return
             
@@ -33,10 +32,16 @@ class BST:
 
             while True:
                 id, nombre, cantidad_vendida, precio, fecha, left, right = struct.unpack(self.FORMAT, file.read(self.RECORD_SIZE))
+                print("pos", pos)
+                print(record.id)
+                print(id, left, right)
 
                 if record.id > id:
                     if right == -1:
+                        print("record size", self.RECORD_SIZE)
+                        print("tell", file.tell())
                         file.seek(-4, 1)
+                        print("tell", file.tell())
                         file.write(struct.pack("i", pos))
                         return
                     else:
@@ -62,6 +67,7 @@ class BST:
     def rangeSearch(self, init_key, end_key):
         a
 
+os.remove("./data.dat")
 
 bst = BST("data.dat")
 
