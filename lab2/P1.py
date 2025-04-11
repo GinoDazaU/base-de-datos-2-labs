@@ -47,7 +47,7 @@ class SecuentialRegister:
 
             while(True):
                 packed_isActive = file.read(1)
-                isActive = struct.unpack(packed_isActive)[0]
+                isActive = struct.unpack("i", packed_isActive)[0]
 
                 file.seek(self.RECORD_SIZE, 1)
 
