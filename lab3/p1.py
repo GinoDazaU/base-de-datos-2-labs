@@ -7,6 +7,7 @@ class StaticHashing:
     # i i i i i
     BUCKET_SIZE = 4
     MAIN_BUCKETS = 5
+    RECORD_SIZE = struct.calcsize("iiiii")
     
 
     def __init__(self, filename: str, BUCKET_SIZE: str, MAIN_BUCKETS: int):
@@ -25,12 +26,25 @@ class StaticHashing:
             for i in bucket:
                 if i == -1:
                     file.write(packed_key)
-                if i == -2:
-                    a
 
-            file.read(4)
+    def search(self, key: int) -> bool:
+        key_pos = key % self.MAIN_BUCKETS
+        
+        with open(self.filename, "r+b") as file:
+            while True:
+                file.seek(key_pos * self.RECORD_SIZE)
+                data = struct.unpack("iiiii", file.read(self.RECORD_SIZE))
 
-            
+                for i in range(self.BUCKET_SIZE):
+                    if data[i] == -1:
+                        return False
+                    elif data[i] == key:
+                        return True
+                
+                key_pos = data[self.BUCKET_SIZE]
+
+                if key_pos == -1:
+                    return False
 
 
 
