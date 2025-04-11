@@ -72,29 +72,31 @@ class StaticHashing:
                 next_pointer = bucket[self.BUCKET_SIZE]         # Se busca el siguiente bucket libre
 
 
-    def search(self, key: int) -> bool:
+    def search(self, key: int) -> int:
         key_pos = key % self.MAIN_BUCKETS
         
         with open(self.filename, "r+b") as file:
             while True:
                 file.seek(key_pos * self.RECORD_SIZE)
+
+                # Leer todo el bucket
                 data = struct.unpack("iiiii", file.read(self.RECORD_SIZE))
 
                 for i in range(self.BUCKET_SIZE):
+                    # un -1 significa que no hay ningun registro de ahi en adelante
                     if data[i] == -1:
-                        return False
+                        return -1
                     elif data[i] == key:
-                        return True
+                        return key
                 
+                # Si no se encontro nada, y hay un siguiente bucket
                 key_pos = data[self.BUCKET_SIZE]
 
                 if key_pos == -1:
-                    return False
-
-
-
-
-
+                    return -1
+                
+    def delete(self, key: int):
+        pass
 
 
 
