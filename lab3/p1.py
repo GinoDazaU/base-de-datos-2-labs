@@ -19,12 +19,12 @@ class StaticHashing:
         key_pos = key % self.TABLE_SIZE
 
         with open(self.filename, "r+b") as file:
-            file.seek(key_pos, 0)
-            packed_next_key = file.read(4)
-            next_key = struct.unpack("i", packed_next_key)[0]
-            for i in range(self.BUCKET_SIZE):
-                file.seek(i * 4, 1)
-                if(next_key == -1):
+            file.seek(key_pos * (self.BUCKET_SIZE * 4 + 4), 0)
+            packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
+            bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)
+
+            for i in bucket:
+                if i == -1:
                     file.write(packed_key)
 
     def search(self, key: int) -> bool:
