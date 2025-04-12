@@ -7,6 +7,7 @@ class StaticHashing:
     # i i i i i
     BUCKET_SIZE = 4
     MAIN_BUCKETS = 5
+    OVERFLOW_BUCKETS = 0
     RECORD_SIZE = struct.calcsize("iiiii")
     
 
@@ -16,16 +17,60 @@ class StaticHashing:
 
     def insert(self, key):
         packed_key = struct.pack("i", key)
-        key_pos = key % self.TABLE_SIZE
+        key_pos = key % self.MAIN_BUCKETS
 
         with open(self.filename, "r+b") as file:
-            file.seek(key_pos * (self.BUCKET_SIZE * 4 + 4), 0)
-            packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
-            bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)
+            # se calcula la posicion en el archivo del bucket principal
+            bucket_offset = key_pos * (self.BUCKET_SIZE * 4 + 4)
+            file.seek(bucket_offset, 0)
 
-            for i in bucket:
-                if i == -1:
+            # se lee el bucket completo incluyendo el puntero al siguiente
+            packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
+            bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)     # trae todo el bucket a ram (es pequeño)
+
+            # se intenta insertar en el bucket principal
+            for i in range(self.BUCKET_SIZE):
+                if bucket[i] == -1:
+                    file.seek(bucket_offset + i * 4)
                     file.write(packed_key)
+                    return
+
+            # si no hay espacio, se verifica el puntero al siguiente bucket
+            next_pointer = bucket[self.BUCKET_SIZE]
+
+            # si no hay siguiente bucket, se crea uno nuevo
+            if next_pointer == -2:
+                new_bucket_pos = self.MAIN_BUCKETS + self.OVERFLOW_BUCKETS
+                self.OVERFLOW_BUCKETS += 1
+
+                # actualiza el puntero en el bucket original
+                file.seek(bucket_offset + self.BUCKET_SIZE * 4)
+                file.write(struct.pack("i", new_bucket_pos))
+
+                # posicion del nuevo bucket
+                overflow_offset = new_bucket_pos * (self.BUCKET_SIZE * 4 + 4)
+                file.seek(overflow_offset)
+
+                # escribe el nuevo key y llena el resto con -1
+                new_bucket_data = [key] + [-1] * (self.BUCKET_SIZE - 1) + [-2]
+                file.write(struct.pack("i" * self.BUCKET_SIZE + "i", *new_bucket_data))
+                return
+
+            # si ya hay un bucket de overflow, se repite el proceso
+            while next_pointer != -2:
+                overflow_offset = next_pointer * (self.BUCKET_SIZE * 4 + 4)
+                file.seek(overflow_offset)
+                packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
+                bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)
+
+                for i in range(self.BUCKET_SIZE):
+                    if bucket[i] == -1:
+                        file.seek(overflow_offset + i * 4)
+                        file.write(packed_key)
+                        return
+
+                next_pointer = bucket[self.BUCKET_SIZE]         # Se busca el siguiente bucket libre
+
 
     def search(self, key: int) -> int:
         key_pos = key % self.MAIN_BUCKETS
