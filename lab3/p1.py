@@ -37,19 +37,14 @@ class StaticHashing:
 
                 for i in range(self.BUCKET_SIZE):
                     if data[i] == -1:
-                        return False
+                        return -1
                     elif data[i] == key:
-                        return True
+                        return key
                 
                 key_pos = data[self.BUCKET_SIZE]
 
                 if key_pos == -1:
-                    return False
-
-
-
-
-
+                    return -1
 
 
 
