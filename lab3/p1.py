@@ -38,24 +38,6 @@ class StaticHashing:
             # si no hay espacio, se verifica el puntero al siguiente bucket
             next_pointer = bucket[self.BUCKET_SIZE]
 
-            # si no hay siguiente bucket, se crea uno nuevo
-            if next_pointer == -2:
-                new_bucket_pos = self.MAIN_BUCKETS + self.OVERFLOW_BUCKETS
-                self.OVERFLOW_BUCKETS += 1
-
-                # actualiza el puntero en el bucket original
-                file.seek(bucket_offset + self.BUCKET_SIZE * 4)
-                file.write(struct.pack("i", new_bucket_pos))
-
-                # posicion del nuevo bucket
-                overflow_offset = new_bucket_pos * (self.BUCKET_SIZE * 4 + 4)
-                file.seek(overflow_offset)
-
-                # escribe el nuevo key y llena el resto con -1
-                new_bucket_data = [key] + [-1] * (self.BUCKET_SIZE - 1) + [-2]
-                file.write(struct.pack("i" * self.BUCKET_SIZE + "i", *new_bucket_data))
-                return
-
             # si ya hay un bucket de overflow, se repite el proceso
             while next_pointer != -2:
                 overflow_offset = next_pointer * (self.BUCKET_SIZE * 4 + 4)
