@@ -1,90 +1,116 @@
 import struct
+import os
 
-# Integrantes: Mikel Bracamonte, Gino Daza
+class Record:
+
+    FORMAT = "i"
+    SIZE = struct.calcsize(FORMAT)
+
+    def __init__(self, id = 0):
+        self.id = id
+    
+    def pack(self):
+        return struct.pack(self.FORMAT, self.id)
+
+    @staticmethod
+    def unpack(data_buffer):
+        id = struct.unpack(Record.FORMAT, data_buffer)
+        return Record(id)
+
+class Bucket:
+
+    def __init__(self, block_factor):
+        self.size = 0
+        self.next_bucket = -1
+        self.records = [Record() for _ in range(block_factor)]
+
+    def add_record(self, record: Record):
+        if not self.isFull():
+            self.records[self.size] = record
+            self.size += 1
+        else:
+            raise Exception("Bucket lleno.")
+        
+    def isFull(self):
+        return self.size == len(self.records)
+    
+    def pack(self):
+        bucket_buffer = struct.pack("i", self.size)
+        bucket_buffer += struct.pack("i", self.next_bucket)
+        for record in self.records:
+            bucket_buffer += record.pack()
+        return bucket_buffer
+    
+    @staticmethod
+    def unpack(bucket_buffer, block_factor):
+        size, next_bucket = struct.unpack("ii", bucket_buffer[:8])
+        bucket = Bucket(block_factor)
+        bucket.size = size
+        bucket.next_bucket = next_bucket
+        for i in range(size):
+            init = 8 + i * Record.SIZE
+            end = init + Record.SIZE
+            record_buffer = bucket_buffer[init:end]
+            record = Record.unpack(record_buffer)
+            bucket.records[i] = record
+        return bucket
+    
+    @staticmethod
+    def calcsize(block_factor):
+        return struct.calcsize("ii") + Record.SIZE * block_factor
 
 class StaticHashing:
 
-    # i i i i i
-    BUCKET_SIZE = 4
-    MAIN_BUCKETS = 5
-    OVERFLOW_BUCKETS = 0
-    RECORD_SIZE = struct.calcsize("iiiii")
-    
-
-    def __init__(self, filename: str, BUCKET_SIZE: str, MAIN_BUCKETS: int):
+    def __init__(self, filename, block_factor, total_buckets, max_overflow_buffer):
         self.filename = filename
-
-
-    def insert(self, key):
-        packed_key = struct.pack("i", key)
-        key_pos = key % self.MAIN_BUCKETS
-
-        with open(self.filename, "r+b") as file:
-            # se calcula la posicion en el archivo del bucket principal
-            bucket_offset = key_pos * (self.BUCKET_SIZE * 4 + 4)
-            file.seek(bucket_offset, 0)
-
-            # se lee el bucket completo incluyendo el puntero al siguiente
-            packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
-            bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)     # trae todo el bucket a ram (es pequeño)
-
-            # se intenta insertar en el bucket principal
-            for i in range(self.BUCKET_SIZE):
-                if bucket[i] == -1:
-                    file.seek(bucket_offset + i * 4)
-                    file.write(packed_key)
-                    return
-
-            # si no hay espacio, se verifica el puntero al siguiente bucket
-            next_pointer = bucket[self.BUCKET_SIZE]
-
-            # si ya hay un bucket de overflow, se repite el proceso
-            while next_pointer != -2:
-                overflow_offset = next_pointer * (self.BUCKET_SIZE * 4 + 4)
-                file.seek(overflow_offset)
-                packed_bucket = file.read(self.BUCKET_SIZE * 4 + 4)
-                bucket = struct.unpack("i" * self.BUCKET_SIZE + "i", packed_bucket)
-
-                for i in range(self.BUCKET_SIZE):
-                    if bucket[i] == -1:
-                        file.seek(overflow_offset + i * 4)
-                        file.write(packed_key)
-                        return
-
-                next_pointer = bucket[self.BUCKET_SIZE]         # Se busca el siguiente bucket libre
-
-
-    def search(self, key: int) -> int:
-        key_pos = key % self.MAIN_BUCKETS
         
+        # Si el archivo existe se leera la metadata
+        if os.path.exists(filename):
+            with open(filename, 'rb') as file:
+                total_buckets_buffer = file.read(4)
+                block_factor_buffer = file.read(4)
+                max_overflow_buffer = file.read(4)
+                self.total_buckets = struct.unpack("i", total_buckets_buffer)
+                self.block_factor = struct.unpack("i", block_factor_buffer)
+                max_overflow_buffer = struct.unpack("i", max_overflow_buffer)
+        else:
+            self.block_factor = block_factor
+            self.total_buckets = total_buckets
+            self.max_overflow_buffer = max_overflow_buffer
+            self.buildFile()
+    
+    def buildFile(self):
+        if os.path.exists(self.filename):
+            raise Exception("El archivo ya existe.")
+        with open(self.filename, "wb") as file:
+            for _ in range(self.total_buckets):
+                bucket = Bucket()
+                file.write(bucket.pack())
+
+    def insertBucket(self, index, bucket: Bucket):
         with open(self.filename, "r+b") as file:
-            while True:
-                file.seek(key_pos * self.RECORD_SIZE)
+            BUCKET_SIZE = Bucket.calcsize(self.block_factor)
+            file.seek(struct.calcsize("iii") + index * BUCKET_SIZE)
+            file.write(bucket.pack())
 
-                # Leer todo el bucket
-                data = struct.unpack("iiiii", file.read(self.RECORD_SIZE))
+    def readBucket(self, index):
+        with open(self.filename, "rb") as file:
+            BUCKET_SIZE = Bucket.calcsize(self.block_factor)
+            file.seek(struct.calcsize("iii") + index * BUCKET_SIZE)
+            bucket_buffer = file.read(BUCKET_SIZE)
+            return Bucket.unpack(bucket_buffer)
 
-                for i in range(self.BUCKET_SIZE):
-                    # un -1 significa que no hay ningun registro de ahi en adelante
-                    if data[i] == -1:
-                        return -1
-                    elif data[i] == key:
-                        return key
-                
-                # Si no se encontro nada, y hay un siguiente bucket
-                key_pos = data[self.BUCKET_SIZE]
-
-                if key_pos == -1:
-                    return -1
-                
-    def delete(self, key: int):
-        pass
-
-
+    def insertRecord(self, record: Record):
+        index = record.id % self.total_buckets
+        bucket = self.readBucket(index)
+        if not bucket.isFull():
+            bucket.add_record(record)
+            self.insertBucket(bucket)
+            print(f"Registro insertado correctamente en la posicion {index}")
+            return True
+        
+            
 
 
 
-keys = [3, 6, 20, 19, 13, 45, 36, 27, 2, 50, 89, 23, 44, 71, 38, 49, 53, 25, 22, 31, 60, 85, 43]
 
-
-hash = StaticHashing("test.dat", 5)
