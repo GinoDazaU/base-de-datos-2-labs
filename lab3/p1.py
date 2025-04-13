@@ -61,30 +61,32 @@ class Bucket:
 
 class StaticHashing:
 
-    def __init__(self, filename, block_factor, total_buckets, max_overflow_buffer):
+    def __init__(self, filename, max_buckets, block_factor, max_overflow):
         self.filename = filename
         
         # Si el archivo existe se leera la metadata
         if os.path.exists(filename):
             with open(filename, 'rb') as file:
-                total_buckets_buffer = file.read(4)
+                max_buckets_buffer = file.read(4)
                 block_factor_buffer = file.read(4)
                 max_overflow_buffer = file.read(4)
-                self.total_buckets = struct.unpack("i", total_buckets_buffer)
+                self.max_buckets = struct.unpack("i", max_buckets_buffer)
                 self.block_factor = struct.unpack("i", block_factor_buffer)
-                max_overflow_buffer = struct.unpack("i", max_overflow_buffer)
+                self.max_overflow = struct.unpack("i", max_overflow_buffer)
         else:
+            self.max_buckets = max_buckets
             self.block_factor = block_factor
-            self.total_buckets = total_buckets
-            self.max_overflow_buffer = max_overflow_buffer
+            self.max_overflow = max_overflow
             self.buildFile()
     
     def buildFile(self):
         if os.path.exists(self.filename):
             raise Exception("El archivo ya existe.")
         with open(self.filename, "wb") as file:
-            for _ in range(self.total_buckets):
-                bucket = Bucket()
+            metadata_buffer = struct.pack("iii", self.max_buckets, self.block_factor, self.max_overflow)
+            file.write(metadata_buffer)
+            for _ in range(self.max_buckets):
+                bucket = Bucket(self.block_factor)
                 file.write(bucket.pack())
 
     def insertBucket(self, index, bucket: Bucket):
@@ -109,8 +111,16 @@ class StaticHashing:
             print(f"Registro insertado correctamente en la posicion {index}")
             return True
         
-            
+        # en caso este lleno
+
+    def load(self):
+        with open(self.filename, "rb") as file:
+            metadata = file.read(12)
+            max_buckets, block_size, max_overflow = struct.unpack("iii", metadata)
+
+            print(max_buckets, block_size, max_overflow)
 
 
-
+staticHashing = StaticHashing("data.dat", 4, 5, 5)
+staticHashing.load()
 
