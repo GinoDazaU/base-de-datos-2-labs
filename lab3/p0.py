@@ -1,1 +1,0 @@
-# Integrantes: Mikel Bracamonte, Gino Daza
