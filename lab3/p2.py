@@ -2,6 +2,7 @@
 import struct
 from typing import TextIO
 import os
+import pickle
 
 class Alumno:
     FORMAT = "i20s20s"
@@ -30,21 +31,22 @@ class Bucket:
         self.records: list[Alumno] = []
         self.fb = fb
 
-        for i in self.fb:
+        for i in range(self.fb):
             self.records.append(Alumno())
 
     def pack(self) -> bytes:
-        data: bytes
-        for record in self.records:
+        data = self.records[0].pack()
+        for record in self.records[1:]:
             data += record.pack()
         return data + struct.pack(self.HEADER_FORMAT, self.size, self.next)
     
     @staticmethod
     def unpack(packed_data: bytes, fb: int) -> "Bucket":
         bucket = Bucket(fb)
+
         size, next = struct.unpack(Bucket.HEADER_FORMAT, packed_data[-8:])
         for i in range(size):
-            bucket.records[i] = Alumno.unpack(packed_data[i * Alumno.SIZE: (i + 1) * Alumno.SIZE])
+            bucket.add_record(Alumno.unpack(packed_data[i * Alumno.SIZE: (i + 1) * Alumno.SIZE]))
         bucket.next = next
 
         return bucket
@@ -63,33 +65,44 @@ class ExtendibleHash:
 
     def __init__(self, filename: str, D: int, fb: int):
         self.filename = filename
+        self.hash_file = filename + "hash_index.dat"
 
-        if os.path.exists(filename): # Leer toda la información
-            with open(filename, "rb") as file:
+        if os.path.exists(self.filename): # Leer toda la información
+            with open(self.filename, "rb") as file:
                 self.D, self.CURRENT_DEPTH, self.BUCKETS, self.OVERFLOW_BUCKETS, self.fb = struct.unpack(self.HEADER_FORMAT, file.read(self.HEADER_SIZE))
-                # TODO leer el hash_index
+            with open(self.hash_file, "rb") as hfile:
+                self.hash_index = pickle.load(hfile)
+            
+            self.BUCKET_SIZE = self.fb * Alumno.SIZE + Bucket.HEADER_SIZE
+            self.MAX_BUCKETS = 2**self.D
         else: # Inicializar todo
             self.D = D
             self.CURRENT_DEPTH = 1
 
-            self.hash_index = [] # key -> [bucket, localdepth]
+            self.hash_index = [None, None] # key -> [bucket, localdepth]
             self.hash_index[0] = [0, 1]
             self.hash_index[1] = [1, 1]
             self.BUCKETS = 2
             self.OVERFLOW_BUCKETS = 0
             self.fb = fb
+            self.write_hash_index()
+
+            self.BUCKET_SIZE = self.fb * Alumno.SIZE + Bucket.HEADER_SIZE
+            self.MAX_BUCKETS = 2**self.D
 
             with open(filename, "xb") as file:
                 self.write_headers(file)
-        
-        self.BUCKET_SIZE = self.fb * Alumno.SIZE + Bucket.HEADER_SIZE
-        self.MAX_BUCKETS = 2**self.D
+                self.write_bucket(file, 0, Bucket(self.fb))
+                self.write_bucket(file, 1, Bucket(self.fb))
 
     def write_headers(self, file: TextIO):
         file.seek(0)
-        file.write(struct.pack(self.HEADER_FORMAT, self.D, self.CURRENT_DEPTH, self.BUCKETS, self.OVERFLOW_BUCKETS, self.fb))
-        # TODO escribir el hash_index
+        file.write(struct.pack(self.HEADER_FORMAT, self.D, self.CURRENT_DEPTH, self.BUCKETS, self.OVERFLOW_BUCKETS, self.fb))        
 
+    def write_hash_index(self):
+        with open(self.hash_file, "wb") as hfile:
+            pickle.dump(self.hash_index, hfile)
+    
     def hash(self, num: int) -> int:
         return num % self.MAX_BUCKETS
     
@@ -108,7 +121,7 @@ class ExtendibleHash:
         with open(self.filename, "r+b") as file:
             binary = self.binary(self.hash(record.id))
             binary = binary[-self.CURRENT_DEPTH:]
-            while int(binary, 2) not in self.hash_index:
+            while int(binary, 2) >= len(self.hash_index) or self.hash_index[int(binary, 2)] == None:
                 binary = binary[1:]
                 
             bucket_pos, local_depth = self.hash_index[int(binary, 2)]
@@ -184,8 +197,13 @@ class ExtendibleHash:
                         local_depth += 1
 
                         # Actualizar el hash index
+                        while(int(bin2, 2) >= len(self.hash_index)): # Hay que extender el array
+                            self.hash_index.append(None)
+
                         self.hash_index[int(bin1, 2)] = [bucket_pos, local_depth]
                         self.hash_index[int(bin2, 2)] = [new_bucket_pos, local_depth]
+
+                        self.write_hash_index()
 
                         self.BUCKETS += 1
                         self.CURRENT_DEPTH = max(self.CURRENT_DEPTH, local_depth)
@@ -234,7 +252,7 @@ class ExtendibleHash:
         with open(self.filename, "rb") as file:
             binary = self.binary(self.hash(key))
             binary = binary[-self.CURRENT_DEPTH:]
-            while int(binary, 2) not in self.hash_index:
+            while int(binary, 2) >= len(self.hash_index) or self.hash_index[int(binary, 2)] == None:
                 binary = binary[1:]
                 
             bucket_pos, local_depth = self.hash_index[int(binary, 2)]
@@ -248,3 +266,22 @@ class ExtendibleHash:
                     return None
                 else: # Revisamos en el overflow bucket
                     bucket_pos = bucket.next
+
+os.remove("data.dat")
+os.remove("data.dathash_index.dat")
+
+extendible_hash = ExtendibleHash("data.dat", 3, 3)
+
+record1 = Alumno(154, "Gino", "Daza")
+record2 = Alumno(358, "Mikel", "Bracamonte")
+record3 = Alumno(203, "Eduardo", "Aragon")
+record4 = Alumno(260, "Jorge", "Quenta")
+record5 = Alumno(528, "Renato", "DaGarcia")
+
+extendible_hash.insert(record1)
+extendible_hash.insert(record2)
+extendible_hash.insert(record3)
+extendible_hash.insert(record4)
+extendible_hash.insert(record5)
+
+print(extendible_hash.search(528))
