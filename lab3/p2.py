@@ -197,7 +197,7 @@ class ExtendibleHash:
                         local_depth += 1
 
                         # Actualizar el hash index
-                        while(int(bin2, 2) >= len(self.hash_index)): # Hay que extender el array
+                        while int(bin2, 2) >= len(self.hash_index): # Hay que extender el array
                             self.hash_index.append(None)
 
                         self.hash_index[int(bin1, 2)] = [bucket_pos, local_depth]
@@ -248,7 +248,7 @@ class ExtendibleHash:
                 self.write_bucket(file, bucket_pos, bucket)
                 return
 
-    def search(self, key: int) -> int:
+    def search(self, key: int) -> Alumno:
         with open(self.filename, "rb") as file:
             binary = self.binary(self.hash(key))
             binary = binary[-self.CURRENT_DEPTH:]
@@ -266,9 +266,6 @@ class ExtendibleHash:
                     return None
                 else: # Revisamos en el overflow bucket
                     bucket_pos = bucket.next
-
-os.remove("data.dat")
-os.remove("data.dathash_index.dat")
 
 extendible_hash = ExtendibleHash("data.dat", 3, 3)
 
