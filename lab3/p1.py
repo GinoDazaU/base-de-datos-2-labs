@@ -1,5 +1,9 @@
+
+# Integrantes: Mikel Bracamonte, Gino Daza
+
 import struct
 import os
+
 
 class Record:
 
@@ -114,7 +118,16 @@ class StaticHashing:
             
             return (file_size - metadata_size) // BUCKET_SIZE - 1
 
+
+    # Inserta un registro
+    # Retorna True si se inserto correctamente
+    # Retorna False si el registro ya existe
     def insertRecord(self, record: Record):
+
+        if self.searchRecord(record.id) != None:
+            print("El registro ya existe")
+            return False
+
         current_index = record.id % self.max_buckets
         bucket = self.readBucket(current_index)
 
@@ -136,6 +149,7 @@ class StaticHashing:
         if not bucket.isFull():
             bucket.add_record(record)
             self.insertBucket(current_index, bucket)
+            print(f"Registro insertado correctamente en la posición {current_index}")
             return True
         
         # Si necesitamos crear un nuevo bucket de overflow
@@ -152,7 +166,7 @@ class StaticHashing:
             with open(self.filename, "ab") as file:
                 file.write(new_bucket.pack())
             
-            print(f"Nuevo bucket overflow creado en posición {new_index}")
+            print(f"Registro insertado correctamente en la posición {current_index}")
             return True
         
         # Si hemos alcanzado el maximo de overflow, hacer rehashing
@@ -177,27 +191,23 @@ class StaticHashing:
         temp_filename = self.filename + ".tmp"
         temp_hashing = StaticHashing(temp_filename, new_max_buckets, self.block_factor, new_max_overflow)
         
-        try:
-            # 4. Reinsertar todos los registros
-            for record in all_records:
-                temp_hashing.insertRecord(record)
-            
-            # 5. Reemplazar archivos
-            os.remove(self.filename)
-            os.rename(temp_filename, self.filename)
-            
-            # 6. Actualizar instancia
-            self.__init__(self.filename, new_max_buckets, self.block_factor, new_max_overflow)
-            print(f"Rehashing completado. Nuevo tamaño: {new_max_buckets} buckets")
-        except Exception as e:
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
-            raise RuntimeError(f"Error durante rehashing: {str(e)}")
-        
-    def searchRecord(self, id):
-        # Busca un registro por su ID.
-        # Retorna el Record si lo encuentra, None si no existe.
 
+        # 4. Reinsertar todos los registros
+        for record in all_records:
+            temp_hashing.insertRecord(record)
+        
+        # 5. Reemplazar archivos
+        os.remove(self.filename)
+        os.rename(temp_filename, self.filename)
+        
+        # 6. Actualizar instancia
+        self.__init__(self.filename, new_max_buckets, self.block_factor, new_max_overflow)
+        print(f"Rehashing completado. Nuevo tamaño: {new_max_buckets} buckets")
+
+        
+    # Busca un registro por su ID.
+    # Retorna el Record si lo encuentra, retorna None si no existe.
+    def searchRecord(self, id):
         current_index = id % self.max_buckets
         
         # Traer el bucket principal a ram
@@ -208,7 +218,7 @@ class StaticHashing:
             if record.id == id:
                 return record
         
-        # Si no esta en el principal, buscar en la cadena de overflow
+        # Si no esta en el principal, buscar en los buckets de overflow
         while bucket.next_bucket != -1:
             current_index = bucket.next_bucket
             bucket = self.readBucket(current_index)
@@ -217,7 +227,6 @@ class StaticHashing:
                 if record.id == id:
                     return record
         
-        # No encontrado
         return None
     
 
@@ -225,11 +234,6 @@ class StaticHashing:
 
 
 def printStructure(hashing: StaticHashing):
-    """
-    Muestra la estructura del StaticHashing en formato de tabla
-    Args:
-        hashing: Objeto StaticHashing a visualizar
-    """
     print("\n=== Estructura del Archivo ===")
     print(f"Buckets principales: {hashing.max_buckets}")
     print(f"Factor de bloque: {hashing.block_factor}")
@@ -242,13 +246,11 @@ def printStructure(hashing: StaticHashing):
     print(f"{'#Bucket':<10}{'IDs':<20}{'Overflow Buckets (IDs)':<30}")
     print("-" * 60)
     
-    # Recorrer todos los buckets principales
     for i in range(hashing.max_buckets):
         primary_bucket = hashing.readBucket(i)
         overflow_buckets = []
         overflow_ids = []
         
-        # Obtener la cadena de overflow si existe
         current_overflow = primary_bucket.next_bucket
         while current_overflow != -1:
             overflow_bucket = hashing.readBucket(current_overflow)
@@ -256,20 +258,22 @@ def printStructure(hashing: StaticHashing):
             overflow_ids.extend([str(r.id) for r in overflow_bucket.records[:overflow_bucket.size]])
             current_overflow = overflow_bucket.next_bucket
         
-        # Construir las cadenas para mostrar
         primary_ids = ", ".join([str(r.id) for r in primary_bucket.records[:primary_bucket.size]])
         overflow_info = ""
         
         if overflow_buckets:
             overflow_info = f"→ Buckets: {', '.join(overflow_buckets)} (IDs: {', '.join(overflow_ids)})"
         
-        # Imprimir la fila
         print(f"{i:<10}{primary_ids:<20}{overflow_info:<30}")
     
 
 staticHashing = StaticHashing("data.dat", 16, 4, 2)
 
-for i in range(50):
+for i in range(30):
     staticHashing.insertRecord(Record(i))
+
+staticHashing.insertRecord(Record(3))
+staticHashing.insertRecord(Record(4))
+staticHashing.insertRecord(Record(5))
 
 printStructure(staticHashing)
