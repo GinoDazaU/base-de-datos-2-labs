@@ -26,6 +26,7 @@ class Bucket:
     def __init__(self, block_factor):
         self.size = 0
         self.next_bucket = -1
+        self.prev_bucket = -1  # se usara para la eliminacion
         self.records = [Record() for _ in range(block_factor)]
 
     def add_record(self, record: Record):
@@ -41,18 +42,20 @@ class Bucket:
     def pack(self):
         bucket_buffer = struct.pack("i", self.size)
         bucket_buffer += struct.pack("i", self.next_bucket)
+        bucket_buffer += struct.pack("i", self.prev_bucket)
         for record in self.records:
             bucket_buffer += record.pack()
         return bucket_buffer
     
     @staticmethod
     def unpack(bucket_buffer, block_factor):
-        size, next_bucket = struct.unpack("ii", bucket_buffer[:8])
+        size, next_bucket, prev_bucket = struct.unpack("iii", bucket_buffer[:12])
         bucket = Bucket(block_factor)
         bucket.size = size
         bucket.next_bucket = next_bucket
+        bucket.prev_bucket = prev_bucket
         for i in range(size):
-            init = 8 + i * Record.SIZE
+            init = 12 + i * Record.SIZE
             end = init + Record.SIZE
             record_buffer = bucket_buffer[init:end]
             record = Record.unpack(record_buffer)
@@ -61,7 +64,7 @@ class Bucket:
     
     @staticmethod
     def calcsize(block_factor):
-        return struct.calcsize("ii") + Record.SIZE * block_factor
+        return struct.calcsize("iii") + Record.SIZE * block_factor
 
 class StaticHashing:
 
@@ -119,17 +122,21 @@ class StaticHashing:
             return (file_size - metadata_size) // BUCKET_SIZE - 1
 
 
-    # Inserta un registro
-    # Retorna True si se inserto correctamente
-    # Retorna False si el registro ya existe
     def insertRecord(self, record: Record):
-
+        """
+        Inserta un registro manteniendo la lista doblemente enlazada:
+        1. Busca espacio en el bucket principal
+        2. Si esta lleno, recorre la cadena de overflow
+        3. Si no hay espacio, crea nuevo bucket de overflow
+        4. Mantiene actualizados los punteros next y prev
+        """
         if self.searchRecord(record.id) != None:
             print("El registro ya existe")
             return False
 
         current_index = record.id % self.max_buckets
         bucket = self.readBucket(current_index)
+        prev_index = -1  # Para el bucket principal, prev es -1
 
         # Intentar insertar en el bucket principal
         if not bucket.isFull():
@@ -138,9 +145,10 @@ class StaticHashing:
             print(f"Registro insertado correctamente en la posición {current_index}")
             return True
 
-        # Seguir la cadena de overflow si el bucket principal esta lleno
+        # Seguir la cadena de overflow si el bucket principal está lleno
         local_overflow = 0
         while bucket.isFull() and bucket.next_bucket != -1:
+            prev_index = current_index
             current_index = bucket.next_bucket
             bucket = self.readBucket(current_index)
             local_overflow += 1
@@ -156,6 +164,7 @@ class StaticHashing:
         elif local_overflow < self.max_overflow:
             new_bucket = Bucket(self.block_factor)
             new_bucket.add_record(record)
+            new_bucket.prev_bucket = current_index  # Establecer puntero al anterior
             new_index = self.getLastIndex() + 1
             
             # Actualizar el último bucket de la cadena
@@ -166,14 +175,14 @@ class StaticHashing:
             with open(self.filename, "ab") as file:
                 file.write(new_bucket.pack())
             
-            print(f"Registro insertado correctamente en la posición {current_index}")
+            print(f"Registro insertado correctamente en la posición {new_index}")
             return True
         
-        # Si hemos alcanzado el maximo de overflow, hacer rehashing
+        # Si hemos alcanzado el máximo de overflow, hacer rehashing
         else:
             self.rehash()
-            return self.insertRecord(record)   # Reintentar la insercion despues del rehashing
-
+            return self.insertRecord(record)  # Reintentar la insercion después del rehashing
+    
     def rehash(self):
         print("Iniciando rehashing...")
         
@@ -230,9 +239,115 @@ class StaticHashing:
         return None
     
 
+    """
+    Elimina un registro manteniendo la estructura de lista doblemente enlazada:
+    1. Busca el registro en la cadena de buckets (principal -> overflows)
+    2. Si se encuentra:
+       - En buckets normales: elimina moviendo el ultimo registro al hueco
+       - Si queda vacio un bucket de overflow:
+         a) Si es el ultimo: trunca el archivo
+         b) Si está en medio: mueve el ultimo bucket al hueco vacio, 
+            actualizando todos los punteros (next/prev) afectados
+    3. Los buckets principales nunca se eliminan (solo se vacian)
+    """
+    def deleteRecord(self, id):
+        found = self._findRecordAndBucket(id)
+        if not found:
+            return False
+        
+        bucket, index, bucket_index = found
+        
+        # Eliminar el registro (swap con el ultimo)
+        if index != bucket.size - 1:
+            bucket.records[index] = bucket.records[bucket.size - 1]
+        bucket.size -= 1
+        
+        # Si el bucket quedo vacio y es de overflow
+        if bucket.size == 0 and bucket_index >= self.max_buckets:
+            self._removeEmptyBucket(bucket_index)
+        else:
+            self.insertBucket(bucket_index, bucket)
+        
+        return True
 
+    # Busca un registro y retorna (bucket, index, bucket_index)
+    def _findRecordAndBucket(self, id):
+        current_index = id % self.max_buckets
+        bucket = self.readBucket(current_index)
+        
+        while True:
+            # Buscar en el bucket actual
+            for i in range(bucket.size):
+                if bucket.records[i].id == id:
+                    return (bucket, i, current_index)
+            
+            # Seguir la cadena
+            if bucket.next_bucket == -1:
+                break
+            current_index = bucket.next_bucket
+            bucket = self.readBucket(current_index)
+        
+        return None
 
+    # Elimina un bucket de overflow vacio
+    def _removeEmptyBucket(self, empty_index):  
+        empty_bucket = self.readBucket(empty_index)
+        
+        # 1. Actualizar el bucket anterior
+        if empty_bucket.prev_bucket != -1:
+            prev_bucket = self.readBucket(empty_bucket.prev_bucket)
+            prev_bucket.next_bucket = empty_bucket.next_bucket
+            self.insertBucket(empty_bucket.prev_bucket, prev_bucket)
+        
+        # 2. Actualizar el bucket siguiente (si existe)
+        if empty_bucket.next_bucket != -1:
+            next_bucket = self.readBucket(empty_bucket.next_bucket)
+            next_bucket.prev_bucket = empty_bucket.prev_bucket
+            self.insertBucket(empty_bucket.next_bucket, next_bucket)
+        
+        # 3. Si es el ultimo bucket, decirle al os que el espacio del ultimo bucket esta libre (truncar)
+        if empty_index == self.getLastIndex():
+            self._truncateFile()
+        else:
+            # 4. Si no es el ultimo, mover el ultimo bucket a esta posición
+            last_index = self.getLastIndex()
+            last_bucket = self.readBucket(last_index)
+            
+            # Copiar el ultimo bucket al espacio vacio
+            self.insertBucket(empty_index, last_bucket)
+            
+            # Actualizar punteros de los vecinos del bucket movido
+            if last_bucket.prev_bucket != -1:
+                prev = self.readBucket(last_bucket.prev_bucket)
+                prev.next_bucket = empty_index
+                self.insertBucket(last_bucket.prev_bucket, prev)
+            
+            if last_bucket.next_bucket != -1:
+                next = self.readBucket(last_bucket.next_bucket)
+                next.prev_bucket = empty_index
+                self.insertBucket(last_bucket.next_bucket, next)
+            
+            self._truncateFile()
 
+    # Trunca el archivo eliminando buckets vacios al final
+    def _truncateFile(self):
+        
+        last_index = self.getLastIndex()
+        while last_index >= self.max_buckets:
+            bucket = self.readBucket(last_index)
+            if bucket.size > 0 or bucket.next_bucket != -1:
+                break
+            last_index -= 1
+        
+        new_size = struct.calcsize("iii") + (last_index + 1) * Bucket.calcsize(self.block_factor)
+        with open(self.filename, 'r+b') as file:
+            file.truncate(new_size)
+
+#---------------------------------
+#             TESTING
+#---------------------------------
+
+# Funcion para imprimir la estructura de los buckets
 def printStructure(hashing: StaticHashing):
     print("\n=== Estructura del Archivo ===")
     print(f"Buckets principales: {hashing.max_buckets}")
@@ -267,13 +382,61 @@ def printStructure(hashing: StaticHashing):
         print(f"{i:<10}{primary_ids:<20}{overflow_info:<30}")
     
 
-staticHashing = StaticHashing("data.dat", 16, 4, 2)
 
-for i in range(30):
+
+staticHashing = StaticHashing("data.dat", 8, 2, 3)
+
+# Se insertan 100 id's distintos
+# Se debe observar 100 id's del 1 al 100
+for i in range(100):
+    i += 1
     staticHashing.insertRecord(Record(i))
 
+printStructure(staticHashing)
+
+# Se intentan insertar 3 id's mas repetidos
+# Debe salir un mensaje que el id ya existe
 staticHashing.insertRecord(Record(3))
 staticHashing.insertRecord(Record(4))
 staticHashing.insertRecord(Record(5))
 
 printStructure(staticHashing)
+
+# Se eliminan el 3 4 5
+# Se debe poder ver que faltan dichos registros (estaban en el bucket 3 4 5)
+
+staticHashing.deleteRecord(3)
+staticHashing.deleteRecord(4)
+staticHashing.deleteRecord(5)
+
+printStructure(staticHashing)
+
+# Se eliminan todos los elemento de un bucket auxiliar intermedio
+# Borramos del bucket 0, los elementos 48 y 64 que pertenecen al bucket 31
+# Se debe poder ver como dicho bucket 31 no esta
+# Se debe poder ver que el bucket auxiliar final 51 encadenado con el bucket principal 4 paso a la posicion 31
+# El bucket 51 fue eliminado por completo truncando el archivo (diciendole al os que esta libre)
+
+staticHashing.deleteRecord(48)
+staticHashing.deleteRecord(64)
+
+printStructure(staticHashing)
+
+# Ahora a modo de prueba se intentara eliminar un bucket principal, este sera el bucket 6
+# Para ello eliminaremos 6 y 22
+# Se debe poder ver que ya no esta
+
+staticHashing.deleteRecord(6)
+staticHashing.deleteRecord(22)
+
+printStructure(staticHashing)
+
+# Ahora insertaremos el 6 y 22 otra vez
+# Se debe poder ver que se inserto el 6 y 22 en el mismo lugar anterior sin problemas
+
+staticHashing.insertRecord(Record(6))
+staticHashing.insertRecord(Record(22))
+
+printStructure(staticHashing)
+
+# Con esto ya estaria los casos de eliminacion probados
