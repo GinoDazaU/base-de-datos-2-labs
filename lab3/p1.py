@@ -1,6 +1,52 @@
 
 # Integrantes: Mikel Bracamonte, Gino Daza
 
+"""
+IMPLEMENTACION DE STATIC HASHING CON DESBORDAMIENTO ENCADENADO
+
+Estructura del Bucket:
+- Cada bucket contiene:
+  * size: entero (4 bytes) - cantidad de registros actuales
+  * next_bucket: entero (4 bytes) - indice del siguiente bucket en la cadena (-1 si no hay)
+  * prev_bucket: entero (4 bytes) - indice del bucket anterior en la cadena (-1 si es principal)
+  * records: 
+    - Array de registros de tamaño fijo (block_factor)
+    - Por fines practicos, cada registro solo contiene un id entero (4 bytes)
+    - [Nota: Gracias al diseño modular enseñada por el profesor en la clase de recuperacion,
+       se podria extender fácilmente para añadir mas campos a los registros
+       modificando solo la clase Record, sin afectar el resto de la implementación]
+
+Clase StaticHashing:
+- Gestiona el archivo binario con la estructura:
+  * Metadata (12 bytes): 
+    - max_buckets (4 bytes)
+    - block_factor (4 bytes)
+    - max_overflow (4 bytes)
+  * Buckets principales (depende del factor de bloque)
+  * Buckets de overflow (depende del usuario)
+
+Algoritmos implementados:
+1. Insercion:
+   - Calcula posicion con hash (id % max_buckets)
+   - Busca espacio en el bucket principal
+   - Si esta lleno, recorre la cadena de overflow
+   - Si no hay espacio, crea nuevo bucket de overflow
+   - Si se alcanza max_overflow, ejecuta rehashing
+
+2. Busqueda:
+   - Calcula posicion con hash (id % max_buckets)
+   - Busca en el bucket principal
+   - Si no esta, recorre la cadena de overflow
+   - Retorna None si no se encuentra
+
+3. Eliminacion:
+   - Busca el registro igual que en busqueda
+   - Si lo encuentra, lo elimina manteniendo la integridad
+   - Reorganiza la cadena si quedan buckets vacios
+"""
+
+
+
 import struct
 import os
 
