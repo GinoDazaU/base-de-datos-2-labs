@@ -286,13 +286,15 @@ class StaticHashing:
     
 
     """
+    Para lograr la eliminacion de forma eficiente, se añadio un puntero hacia atras en cada bucket
+
     Elimina un registro manteniendo la estructura de lista doblemente enlazada:
     1. Busca el registro en la cadena de buckets (principal -> overflows)
     2. Si se encuentra:
        - En buckets normales: elimina moviendo el ultimo registro al hueco
        - Si queda vacio un bucket de overflow:
          a) Si es el ultimo: trunca el archivo
-         b) Si está en medio: mueve el ultimo bucket al hueco vacio, 
+         b) Si esta en medio: mueve el ultimo bucket al hueco vacio, 
             actualizando todos los punteros (next/prev) afectados
     3. Los buckets principales nunca se eliminan (solo se vacian)
     """
