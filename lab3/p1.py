@@ -295,7 +295,7 @@ class StaticHashing:
        - Si queda vacio un bucket de overflow:
          a) Si es el ultimo: trunca el archivo
          b) Si esta en medio: mueve el ultimo bucket al hueco vacio, 
-            actualizando todos los punteros (next/prev) afectados
+            actualizando todos los punteros (next/prev) afectados y trunca el archivo
     3. Los buckets principales nunca se eliminan (solo se vacian)
     """
     def deleteRecord(self, id):
