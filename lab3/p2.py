@@ -2,20 +2,58 @@
 import struct
 from typing import TextIO
 
+class Alumno:
+    FORMAT = "i20s20s"
+    SIZE = struct.calcsize(FORMAT)
+
+    def __init__(self, id: int = -1, nombre: str = "", apellido: str = ""):
+        self.id = id
+        self.nombre = nombre[:20].ljust(20)
+        self.apellido = apellido[:20].ljust(20)
+
+    def pack(self) -> bytes:
+        return struct.pack(self.FORMAT, self.id, self.nombre.encode(), self.apellido.encode())
+    
+    @staticmethod
+    def unpack(packed_data: bytes) -> "Alumno":
+        id, nombre, apellido = struct.unpack(Alumno.FORMAT, packed_data)
+        return Alumno(id, nombre.decode(), apellido.decode())
+
 class Bucket:
     size = 0
+    next = -1
+    records: list[Alumno] = []
+
+    FORMAT = "ii"
+    SIZE = struct.calcsize(FORMAT)
 
     def __init__(self, fb):
         self.next = -1
         self.fb = fb
 
-class Hash:
+        for i in self.fb:
+            self.records.append(Alumno())
+
+    def pack(self) -> bytes:
+        data: bytes
+        for alumno in self.records:
+            data += alumno.pack()
+        return data + struct.pack(self.FORMAT, self.size, self.next)
+    
+    def is_full(self) -> bool:
+        return self.size == self.fb
+    
+    def add_alumno(self, alumno: Alumno):
+        pass
+
+class ExtendibleHash:
     D = 3
+    CURRENT_DEPTH = 1
     MAX_BUCKETS = 2**D
     BUCKETS = 0
     OVERFLOW_BUCKETS = 0
     fb = 3
-    hash_index = dict()
+    hash_index = list()
 
     FORMAT = "i" * (fb + 2)
     BUCKET_SIZE = struct.calcsize(FORMAT)
@@ -25,8 +63,8 @@ class Hash:
 
     def __init__(self, filename: str): # TODO si el archivo ya existe, leer el header, si no existe, inicializar todo
         self.filename = filename
-        self.hash_index["0"] = 0
-        self.hash_index["1"] = 1
+        self.hash_index[0] = 0
+        self.hash_index[1] = 1
         self.BUCKETS = 2
 
     def hash(self, num: int) -> int:
