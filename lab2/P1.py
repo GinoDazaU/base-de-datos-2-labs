@@ -2,306 +2,213 @@ import struct
 import math
 import os
 
-class Venta:
-    def __init__(self, id, nombre, cantidad_vendida, precio_unitario, fecha):
-        self.isActive = 1
+class Record:
+
+    FORMAT = "i30sif10s"
+    SIZE = struct.calcsize(FORMAT)
+
+    def __init__(self, id: int, nombre: str, cantidad_vendida: int, precio_unitario: float, fecha: str):
         self.id = id
         self.nombre = nombre
         self.cantidad_vendida = cantidad_vendida
         self.precio_unitario = precio_unitario
         self.fecha = fecha
 
-class SecuentialRegister:
-    FORMAT = "i30sif10s"
-    RECORD_SIZE = struct.calcsize(FORMAT)
+    def pack(self):
+        nombre = self.nombre[:30].ljust(30, '\x00')
+        fecha = self.fecha[:10].ljust(10, '\x00')
+        
+        return struct.pack(
+            self.FORMAT,
+            self.id,
+            nombre.encode('utf-8'),
+            self.cantidad_vendida,
+            self.precio_unitario,
+            fecha.encode('utf-8')
+        )
+    
+    @staticmethod
+    def unpack(record_buffer):
+        id, nombre, cantidad_vendida, precio_unitario, fecha = struct.unpack(Record.FORMAT, record_buffer)
+        return Record(
+            id,
+            nombre.decode('utf-8').rstrip('\x00'),
+            cantidad_vendida,
+            precio_unitario,
+            fecha.decode('utf-8').rstrip('\x00')
+        )
+    
+    def print(self):
+        print(f"Id: {self.id} | Nombre: {self.nombre} | Cantidad Vendida: {self.cantidad_vendida} | Precio unitario: {self.precio_unitario} | Fecha: {self.fecha}")
+    
+class SecuentialRecorder:
+
+    METADATA_FORMAT = ("iii")
+    METADATA_SIZE = struct.calcsize(METADATA_FORMAT)
 
     def __init__(self, filename):
         self.filename = filename
 
-    def insert(self, record: Venta):
-        packed_record = struct.pack(
-            self.FORMAT,
-            record.id,
-            record.nombre.encode(),
-            record.cantidad_vendida,
-            record.precio_unitario,
-            record.fecha.encode()
-        )
+        if os.path.exists(filename):
+            with open(filename, "rb") as file:
+                metadata_buffer = file.read(self.METADATA_SIZE)
+                self.main_size, self.aux_size, self.max_aux_size = struct.unpack(self.METADATA_FORMAT, metadata_buffer)
+        else:
+            with open(filename, "wb") as file:
+                self.main_size = 0
+                self.aux_size = 0
+                self.max_aux_size = 1
+                metadata_buffer = struct.pack(self.METADATA_FORMAT, self.main_size, self.aux_size, self.max_aux_size)
+                file.write(metadata_buffer)
 
-        reorganize_needed = False
 
+    def update_metadata(self):
         with open(self.filename, "r+b") as file:
-            file.seek(0, 2)
-            pos = file.tell()
+            metadata_buffer = struct.pack(self.METADATA_FORMAT, self.main_size, self.aux_size, self.max_aux_size)
+            file.write(metadata_buffer)
 
-            # --------------------------------------------------
-            # Paso 0: Archivo vacio, insertar el primer registro
-            # ---------------------------------------------------
-            if pos == 0:
-                file.write(struct.pack("i", 1))
-                file.write(packed_record)
-                aux_rows = max(1, math.floor(math.log2(1)))
-                empty_record = struct.pack(
-                    self.FORMAT,
-                    -1, b'\x00' * 30, 0, 0.0, b'\x00' * 10
-                )
-                for _ in range(aux_rows):
-                    file.write(empty_record)
-                print(f"Registro insertado correctamente (primer registro). ID: {record.id}")
-                return
+    def insert_record(self, record: Record):
+        """Inserta un registro en el area auxiliar y reconstruye si es necesario"""
 
-            file.seek(0)
-            packed_rows = file.read(4)
-            data_rows = struct.unpack("i", packed_rows)[0]
-            aux_rows = max(1, math.floor(math.log2(data_rows)))
+        # 0. Verificar que el registro no exista
+        if self.search_record(record.id) != None:
+            print(f"El registro con id: {record.id} ya existe")
+            return False
 
-            # ------------------------------------------
-            # Paso 1: Buscar en zona principal (binaria)
-            # ------------------------------------------
-            left, right = 0, data_rows - 1
-            found = False
+        # 1. Escribir en área auxiliar
+        with open(self.filename, "r+b") as file:
+            # Posicionarse al final del área auxiliar
+            file.seek(self.METADATA_SIZE + self.main_size * Record.SIZE + self.aux_size * Record.SIZE)
+            file.write(record.pack())
+            self.aux_size += 1
+            self.update_metadata()
+            print("Registro insertado correctamente")
+        
+        # 2. Reconstruir si se excede el límite
+        if self.aux_size > self.max_aux_size:
+            print("Zona auxiliar llena, reconstruyendo archivo...")
+            self.rebuild_file()
+
+    def rebuild_file(self):
+        """Reconstruye el archivo fusionando areas principal y auxiliar"""
+        # 1. Leer todos los registros activos
+        active_records = []
+        
+        # Leer área principal
+        with open(self.filename, "rb") as file:
+            file.seek(self.METADATA_SIZE)
+            for _ in range(self.main_size):
+                buffer = file.read(Record.SIZE)
+                if not buffer: break
+                record = Record.unpack(buffer)
+                if record.id != -1:
+                    active_records.append(record)
+        
+        # Leer área auxiliar
+        with open(self.filename, "rb") as file:
+            file.seek(self.METADATA_SIZE + self.main_size * Record.SIZE)
+            for _ in range(self.aux_size):
+                buffer = file.read(Record.SIZE)
+                if not buffer: break
+                record = Record.unpack(buffer)
+                if record.id != -1:
+                    active_records.append(record)
+        
+        # 2. Ordenar por ID (insertion sort)
+        for i in range(1, len(active_records)):
+            key = active_records[i]
+            j = i - 1
+            while j >= 0 and active_records[j].id > key.id:
+                active_records[j + 1] = active_records[j]
+                j -= 1
+            active_records[j + 1] = key
+        
+        # 3. Calcular nuevo tamaño auxiliar (nunca menor a 1)
+        new_main_size = len(active_records)
+        new_max_aux = max(1, math.floor(math.log2(new_main_size))) if new_main_size > 0 else 1
+
+        
+        # 4. Escribir el nuevo archivo
+        temp_filename = self.filename + ".tmp"
+        with open(temp_filename, "wb") as file:
+            # Escribir metadata
+            metadata = struct.pack(self.METADATA_FORMAT, new_main_size, 0, new_max_aux)
+            file.write(metadata)
+            
+            # Escribir registros principales
+            for record in active_records:
+                file.write(record.pack())
+            
+            # Escribir área auxiliar vacía
+            empty_record = Record(-1, "", 0, 0.0, "").pack()
+            for _ in range(new_max_aux):
+                file.write(empty_record)
+        
+        # 5. Reemplazar archivo
+        os.replace(temp_filename, self.filename)
+        
+        # 6. Actualizar metadatos
+        self.main_size = new_main_size
+        self.aux_size = 0
+        self.max_aux_size = new_max_aux
+
+    def search_record(self, id: int):
+        """Busca un registro por ID usando búsqueda binaria (principal) + secuencial (auxiliar)"""
+        # 1. Busqueda binaria en area principal
+        with open(self.filename, "rb") as file:
+            file.seek(self.METADATA_SIZE)
+            left, right = 0, self.main_size - 1
+            
             while left <= right:
                 mid = (left + right) // 2
-                file.seek(4 + mid * self.RECORD_SIZE)
-                packed = file.read(self.RECORD_SIZE)
-                if len(packed) < self.RECORD_SIZE:
-                    break
-                id_registro = struct.unpack("i", packed[:4])[0]
+                file.seek(self.METADATA_SIZE + mid * Record.SIZE)
+                buffer = file.read(Record.SIZE)
+                record = Record.unpack(buffer)
                 
-                if id_registro == -1:
-                    # Buscar el siguiente registro no vacio hacia la derecha
-                    temp_pos = mid + 1
-                    while temp_pos <= right:
-                        file.seek(4 + temp_pos * self.RECORD_SIZE)
-                        temp_packed = file.read(self.RECORD_SIZE)
-                        if len(temp_packed) < self.RECORD_SIZE:
-                            break
-                        temp_id = struct.unpack("i", temp_packed[:4])[0]
-                        if temp_id != -1:
-                            if temp_id == record.id:
-                                found = True
-                                break
-                            elif temp_id < record.id:
-                                left = temp_pos + 1
-                            else:
-                                right = mid - 1
-                            break
-                        temp_pos += 1
-                    else:
-                        # Todos los registros a la derecha estan vacios
-                        right = mid - 1
-                    if found:
-                        break
-                    continue
-                
-                if id_registro == record.id:
-                    found = True
-                    break
-                elif id_registro < record.id:
+                if record.id == id:
+                    return record
+                elif record.id < id:
                     left = mid + 1
                 else:
                     right = mid - 1
-
-            # --------------------------------------------
-            # Paso 2: Buscar en zona auxiliar (secuencial)
-            # --------------------------------------------
-            if not found:
-                file.seek(4 + data_rows * self.RECORD_SIZE)
-                packed_aux_records = file.read(aux_rows * self.RECORD_SIZE)
-                if len(packed_aux_records) < aux_rows * self.RECORD_SIZE:
-                    packed_aux_records += b'\x00' * (aux_rows * self.RECORD_SIZE - len(packed_aux_records))
-
-                for i in range(aux_rows):
-                    offset = i * self.RECORD_SIZE
-                    if offset + 4 > len(packed_aux_records):
-                        continue
-                    id_aux = struct.unpack("i", packed_aux_records[offset : offset + 4])[0]
-                    if id_aux == record.id:
-                        found = True
-                        break
-
-            if found:
-                print(f"Error: El registro con ID {record.id} ya existe.")
-                return
-
-            # --------------------------------------------------
-            # Paso 3: Insertar en espacio libre de zona auxiliar
-            # --------------------------------------------------
-            inserted = False
-            if not found:
-                file.seek(4 + data_rows * self.RECORD_SIZE)
-                packed_aux_records = file.read(aux_rows * self.RECORD_SIZE)
-                if len(packed_aux_records) < aux_rows * self.RECORD_SIZE:
-                    packed_aux_records += b'\x00' * (aux_rows * self.RECORD_SIZE - len(packed_aux_records))
-
-                for i in range(aux_rows):
-                    offset = i * self.RECORD_SIZE
-                    if offset + 4 > len(packed_aux_records):
-                        continue
-                    id_aux = struct.unpack("i", packed_aux_records[offset : offset + 4])[0]
-                    if id_aux == -1:
-                        aux_start = 4 + data_rows * self.RECORD_SIZE
-                        file.seek(aux_start + i * self.RECORD_SIZE)
-                        file.write(packed_record)
-                        print(f"Registro insertado en la zona auxiliar (posición {i}). ID: {record.id}")
-                        inserted = True
-                        break
-
-            # ------------------------------------------
-            # Paso 4: Zona auxiliar llena -> reorganizar
-            # ------------------------------------------
-            if not inserted and not found:
-                print(f"Zona auxiliar llena. Se requiere reorganizacion para ID: {record.id}")
-                reorganize_needed = True
-
-        # En caso sea necesario se reorganiza
-        if reorganize_needed:
-            self.reorganize()
-            # Despues de reorganizar, intentar insertar de nuevo (se llama al mismo metodo)
-            self.insert(record)
-
-    def reorganize(self):
-        with open(self.filename, "r+b") as file:
-            file.seek(0)
-            data_rows = struct.unpack("i", file.read(4))[0]
-
-            # Leer zona principal (todos los registros, no solo los activos)
-            main_records = []
-            for i in range(data_rows):
-                file.seek(4 + i * self.RECORD_SIZE)
-                rec = file.read(self.RECORD_SIZE)
-                if len(rec) < self.RECORD_SIZE:
-                    break
-                id_reg = struct.unpack("i", rec[:4])[0]
-                main_records.append((id_reg, rec))
-
-            # Filtrar solo registros activos de la zona principal
-            active_main_records = [rec for id_reg, rec in main_records if id_reg != -1]
-
-            # Leer zona auxiliar
-            aux_rows = max(1, math.floor(math.log2(data_rows)))
-            aux_records = []
-            file.seek(4 + data_rows * self.RECORD_SIZE)
-            aux_zone_bytes = file.read(aux_rows * self.RECORD_SIZE)
-            for i in range(aux_rows):
-                offset = i * self.RECORD_SIZE
-                if offset + self.RECORD_SIZE > len(aux_zone_bytes):
-                    break
-                rec = aux_zone_bytes[offset : offset + self.RECORD_SIZE]
-                id_aux = struct.unpack("i", rec[:4])[0]
-                if id_aux != -1:
-                    aux_records.append(rec)
-
-        # Ordenar la zona auxiliar con insertion sort
-        for j in range(1, len(aux_records)):
-            key = aux_records[j]
-            key_id = struct.unpack("i", key[:4])[0]
-            i = j - 1
-            while i >= 0 and struct.unpack("i", aux_records[i][:4])[0] > key_id:
-                aux_records[i + 1] = aux_records[i]
-                i -= 1
-            aux_records[i + 1] = key
-
-        # Fusionar las listas ordenadas
-        merged = []
-        i = j = 0
-        main_records_sorted = sorted(active_main_records, key=lambda x: struct.unpack("i", x[:4])[0])
         
-        while i < len(main_records_sorted) and j < len(aux_records):
-            main_id = struct.unpack("i", main_records_sorted[i][:4])[0]
-            aux_id = struct.unpack("i", aux_records[j][:4])[0]
-            if main_id < aux_id:
-                merged.append(main_records_sorted[i])
-                i += 1
-            else:
-                merged.append(aux_records[j])
-                j += 1
-        while i < len(main_records_sorted):
-            merged.append(main_records_sorted[i])
-            i += 1
-        while j < len(aux_records):
-            merged.append(aux_records[j])
-            j += 1
-
-        new_data_rows = len(merged)
-        temp_filename = self.filename + ".tmp"
-        with open(temp_filename, "wb") as temp_file:
-            temp_file.write(struct.pack("i", new_data_rows))
-            for rec in merged:
-                temp_file.write(rec)
-
-            aux_rows = max(1, math.floor(math.log2(new_data_rows)))
-            empty_record = struct.pack(
-                self.FORMAT,
-                -1, b'\x00' * 30, 0, 0.0, b'\x00' * 10
-            )
-            for _ in range(aux_rows):
-                temp_file.write(empty_record)
-
-        try:
-            os.remove(self.filename)
-            os.rename(temp_filename, self.filename)
-            print(f"Reorganizacion completada. Nueva zona principal con {new_data_rows} registros.")
-        except PermissionError as e:
-            print(f"Error al intentar eliminar el archivo: {e}")
-
+        # 2. Busqueda secuencial en area auxiliar (cargada en RAM)
+        with open(self.filename, "rb") as file:
+            file.seek(self.METADATA_SIZE + self.main_size * Record.SIZE)
+            for _ in range(self.aux_size):
+                buffer = file.read(Record.SIZE)
+                record = Record.unpack(buffer)
+                if record.id == id:
+                    return record
+        
+        return None
 
     def load(self):
-        with open(self.filename, "rb") as file:
-            data = file.read(4)
-            if len(data) < 4:
-                print("Archivo vacio o corrupto.")
-                return
-            data_rows = struct.unpack("i", data)[0]
-            print(f"\nCantidad de registros en zona principal: {data_rows}")
+        with open(self.filename, 'rb') as file:
+            metadata_buffer = file.read(self.METADATA_SIZE)
+            main_size, aux_size, max_aux_size = struct.unpack(self.METADATA_FORMAT, metadata_buffer)
+            records = []
+            for i in range(main_size + aux_size):
+                record_buffer = file.read(Record.SIZE)
+                records.append(Record.unpack(record_buffer))
 
-            print("\nZona Principal:")
-            for i in range(data_rows):
-                record_bytes = file.read(self.RECORD_SIZE)
-                if len(record_bytes) < self.RECORD_SIZE:
-                    break
-                id_, nombre, cantidad, precio, fecha = struct.unpack(self.FORMAT, record_bytes)
-                if id_ != -1:
-                    print(f"ID: {id_}, Nombre: {nombre.decode().strip()}, Cantidad: {cantidad}, Precio: {precio}, Fecha: {fecha.decode().strip()}")
-
-            aux_rows = max(1, math.floor(math.log2(data_rows)))
-
-            print("\nZona Auxiliar:")
-            for _ in range(aux_rows):
-                record_bytes = file.read(self.RECORD_SIZE)
-                if len(record_bytes) < self.RECORD_SIZE:
-                    break
-                id_, nombre, cantidad, precio, fecha = struct.unpack(self.FORMAT, record_bytes)
-                if id_ != -1:
-                    print(f"ID: {id_}, Nombre: {nombre.decode().strip()}, Cantidad: {cantidad}, Precio: {precio}, Fecha: {fecha.decode().strip()}")
+            print("\nMetadata:")
+            print(f"Tamaño de la zona principal: {main_size}")
+            print(f"Tamaño de la zona auxiliar: {aux_size}")
+            print(f"Tamaño maximo de la zona auxiliar: {max_aux_size}")
+            print("Registros:")
+            for i in range(main_size + aux_size):
+                records[i].print()
 
 
 
 
-# prueba
 
-import csv
+# Crear archivo
+registrador = SecuentialRecorder("test.dat")
 
-if not os.path.exists("data.dat"):
-    with open("data.dat", "wb") as f:
-        pass
+# Insertar 2 registros
+registrador.insert_record(Record(1, "A", 10, 1.0, "2023-01-01"))
+registrador.insert_record(Record(2, "B", 20, 2.0, "2023-01-02"))
 
-ventas = []
-with open("sales_dataset_copy.csv", "r", encoding="utf-8") as data:
-    reader = csv.reader(data)
-    next(reader)
-    for row in reader:
-        id_venta = int(row[0])
-        nombre = row[1].ljust(30)[:30]
-        cantidad = int(row[2])
-        precio = float(row[3])
-        fecha = row[4].ljust(10)[:10]
-        venta = Venta(id_venta, nombre, cantidad, precio, fecha)
-        ventas.append(venta)
-
-secuentialRegister = SecuentialRegister("data.dat")
-
-for i in range(300):
-    secuentialRegister.insert(ventas[i])
-
-secuentialRegister.load()
+registrador.load()
