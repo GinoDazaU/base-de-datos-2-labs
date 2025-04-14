@@ -1,31 +1,30 @@
-ID de la venta,Nombre producto,Cantidad vendida,Precio unitario,Fecha de venta
-2,Estabilizador de Voltaje,35,192.26,2024-10-21
-1,Báscula Inteligente,43,1809.71,2024-05-07
+1,Estabilizador de Voltaje,35,192.26,2024-10-21
+2,Báscula Inteligente,43,1809.71,2024-05-07
 3,Estabilizador de Voltaje,7,1240.21,2024-08-11
-19,Power Bank Solar,11,1078.98,2024-12-04
+4,Power Bank Solar,11,1078.98,2024-12-04
 5,Placa Madre,40,333.33,2024-05-23
-16,Monitor de Frecuencia Cardíaca,12,523.11,2024-08-09
-11,Estabilizador de Voltaje,28,1235.75,2024-06-03
+6,Monitor de Frecuencia Cardíaca,12,523.11,2024-08-09
+7,Estabilizador de Voltaje,28,1235.75,2024-06-03
 8,Cafetera Inteligente,31,1751.2,2024-06-04
 9,Reproductor de Vinilo,32,318.15,2024-05-07
 10,Disco Externo SSD,32,1491.2,2024-07-02
-7,Altavoz Inteligente,43,99.6,2024-06-17
+11,Altavoz Inteligente,43,99.6,2024-06-17
 12,Placa de Desarrollo ESP32,33,99.27,2024-08-15
 13,Disco Externo SSD,4,1881.38,2025-01-20
 14,Joystick,50,1485.31,2024-05-18
 15,Hub USB-C,16,350.54,2025-01-31
-6,Mochila Solar,45,621.76,2025-01-04
+16,Mochila Solar,45,621.76,2025-01-04
 17,Auriculares,38,902.58,2024-10-18
 18,Termómetro Inteligente,16,938.11,2024-07-22
-4,Robot Aspiradora,2,1685.78,2024-08-26
+19,Robot Aspiradora,2,1685.78,2024-08-26
 20,Termómetro Inteligente,12,1884.33,2024-09-13
 21,Cerradura Inteligente,19,1809.85,2024-09-21
 22,Power Bank Solar,27,396.57,2025-03-13
 23,Cámara para Auto Dashcam,17,632.78,2025-01-01
 24,Procesador,43,981.91,2024-10-30
 25,Cargador Portátil,36,1786.42,2025-03-23
-27,Altavoces,24,270.58,2024-12-13
-26,Teclado,48,364.96,2024-08-26
+26,Altavoces,24,270.58,2024-12-13
+27,Teclado,48,364.96,2024-08-26
 28,Cámara 360°,18,292.08,2025-01-03
 29,Smartwatch,22,1849.75,2025-03-22
 30,Memoria RAM,16,14.46,2024-09-01
