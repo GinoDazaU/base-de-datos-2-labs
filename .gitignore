@@ -1,2 +1,5 @@
 *.exe
 *.dat
+*.env
+*__pycache__
+*venv
