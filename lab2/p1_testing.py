@@ -1,100 +1,94 @@
 from p1 import SecuentialRecorder
 import os
 import time
+import random
 import matplotlib.pyplot as plt
 
-# Configuración inicial
-if os.path.exists("p1_testing.dat"):
-    os.remove("p1_testing.dat")
+# Configuración
+TEST_FILE = "p1_testing.dat"
+CSV_FILE = "sales_dataset.csv"
+NUM_SEARCHES = 10000
+NUM_RANGE_SEARCHES = 10000
+NUM_DELETIONS = 500
 
-secuentialRecorder = SecuentialRecorder("p1_testing.dat")
+# Preparación
+if os.path.exists(TEST_FILE):
+    os.remove(TEST_FILE)
 
-# 1. Medición de inserción de registros
-print("=== MEDICIÓN DE INSERCIÓN ===")
-start_time = time.time()
-secuentialRecorder.load_from_csv("sales_dataset.csv")
-insert_time = time.time() - start_time
-print(f"Tiempo total de inserción: {insert_time:.4f} segundos")
+db = SecuentialRecorder(TEST_FILE)
 
-# 2. Medición de búsquedas específicas
-print("\n=== MEDICIÓN DE BÚSQUEDAS ESPECÍFICAS ===")
-search_ids = [1, 50, 100, 150, 200]  # IDs a buscar
+# 1. Prueba de inserción (todo el CSV)
+print("=== PRUEBA DE INSERCIÓN ===")
+start_time = time.perf_counter()
+db.load_from_csv(CSV_FILE)
+total_insert_time = time.perf_counter() - start_time
+print(f"Tiempo total: {total_insert_time:.4f}s")
+print(f"Registros insertados: {db.main_size + db.aux_size}")
+print(f"Tiempo promedio por inserción: {total_insert_time/(db.main_size + db.aux_size):.6f}s\n")
+
+# 2. Prueba de búsquedas (1000 aleatorias)
+print(f"=== PRUEBA DE BÚSQUEDAS ({NUM_SEARCHES}) ===")
 search_times = []
+existing_ids = [i for i in range(1, db.main_size + 1)]  # IDs existentes
 
-for id in search_ids:
-    start_time = time.time()
-    result = secuentialRecorder.search_record(id)
-    search_time = time.time() - start_time
-    search_times.append(search_time)
-    print(f"Búsqueda ID {id}: {search_time:.6f} segundos | {'Encontrado' if result else 'No encontrado'}")
+for _ in range(NUM_SEARCHES):
+    target_id = random.choice(existing_ids)
+    start_time = time.perf_counter()
+    db.search_record(target_id)
+    search_times.append(time.perf_counter() - start_time)
 
-# 3. Medición de búsqueda por rangos
-print("\n=== MEDICIÓN DE BÚSQUEDA POR RANGOS ===")
-ranges = [(1, 10), (50, 60), (100, 110), (150, 160), (200, 210)]
+print(f"Tiempo promedio: {sum(search_times)/len(search_times):.6f}s")
+print(f"Tiempo máximo: {max(search_times):.6f}s")
+print(f"Tiempo mínimo: {min(search_times):.6f}s\n")
+
+# 3. Prueba de rangos (100 búsquedas)
+print(f"=== PRUEBA DE RANGOS ({NUM_RANGE_SEARCHES}) ===")
 range_times = []
 
-for r in ranges:
-    start_time = time.time()
-    results = secuentialRecorder.search_range(r[0], r[1])
-    range_time = time.time() - start_time
-    range_times.append(range_time)
-    print(f"Rango {r[0]}-{r[1]}: {range_time:.6f} segundos | {len(results)} registros encontrados")
+for _ in range(NUM_RANGE_SEARCHES):
+    start_id = random.randint(1, db.main_size//2)
+    end_id = start_id + random.randint(5, 50)
+    start_time = time.perf_counter()
+    db.search_range(start_id, end_id)
+    range_times.append(time.perf_counter() - start_time)
 
-# 4. Medición de eliminación
-print("\n=== MEDICIÓN DE ELIMINACIÓN ===")
-delete_ids = [2, 51, 101, 151, 201]  # IDs a eliminar
+print(f"Tiempo promedio: {sum(range_times)/len(range_times):.6f}s\n")
+
+# 4. Prueba de eliminación (300 registros)
+print(f"=== PRUEBA DE ELIMINACIÓN ({NUM_DELETIONS}) ===")
 delete_times = []
+delete_candidates = random.sample(existing_ids, min(NUM_DELETIONS, len(existing_ids)))
 
-for id in delete_ids:
-    start_time = time.time()
-    success = secuentialRecorder.delete_record(id)
-    delete_time = time.time() - start_time
-    delete_times.append(delete_time)
-    print(f"Eliminación ID {id}: {delete_time:.6f} segundos | {'Éxito' if success else 'Fallo'}")
+for target_id in delete_candidates:
+    start_time = time.perf_counter()
+    db.delete_record(target_id)
+    delete_times.append(time.perf_counter() - start_time)
 
-# Generación de gráficas
-plt.figure(figsize=(12, 8))
+print(f"Tiempo promedio: {sum(delete_times)/len(delete_times):.6f}s")
+print(f"Registros eliminados: {len(delete_times)}\n")
 
-# Gráfica de búsquedas
-plt.subplot(2, 2, 1)
-plt.plot(search_ids, search_times, 'bo-')
-plt.title('Tiempo de Búsqueda por ID')
-plt.xlabel('ID')
-plt.ylabel('Segundos')
-plt.grid(True)
-
-# Gráfica de rangos
-plt.subplot(2, 2, 2)
-plt.plot([f"{r[0]}-{r[1]}" for r in ranges], range_times, 'go-')
-plt.title('Tiempo de Búsqueda por Rango')
-plt.xlabel('Rango de IDs')
-plt.ylabel('Segundos')
-plt.grid(True)
-
-# Gráfica de eliminación
-plt.subplot(2, 2, 3)
-plt.plot(delete_ids, delete_times, 'ro-')
-plt.title('Tiempo de Eliminación por ID')
-plt.xlabel('ID')
-plt.ylabel('Segundos')
-plt.grid(True)
-
-# Gráfica comparativa
-plt.subplot(2, 2, 4)
-operations = ['Inserción', 'Búsqueda Prom', 'Rango Prom', 'Eliminación Prom']
-times = [
-    insert_time,
+# Gráfico comparativo
+operations = ['Inserción', 'Búsqueda', 'Rango', 'Eliminación']
+avg_times = [
+    total_insert_time/(db.main_size + db.aux_size),
     sum(search_times)/len(search_times),
     sum(range_times)/len(range_times),
     sum(delete_times)/len(delete_times)
 ]
-plt.bar(operations, times, color=['blue', 'green', 'orange', 'red'])
-plt.title('Comparación de Operaciones')
-plt.ylabel('Segundos promedio')
-plt.grid(True)
+
+plt.figure(figsize=(10, 6))
+bars = plt.bar(operations, avg_times, color=['blue', 'green', 'orange', 'red'])
+plt.title('Comparación de Operaciones (Tiempos Promedio)')
+plt.ylabel('Segundos')
+plt.grid(axis='y')
+
+# Añadir valores en las barras
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height,
+             f'{height:.6f}s',
+             ha='center', va='bottom')
 
 plt.tight_layout()
-plt.savefig('performance_results.png')
-plt.show()
-
-print("\n=== RESULTADOS GUARDADOS EN performance_results.png ===")
+plt.savefig('performance_comparison.png')
+print("Gráfico guardado como 'performance_comparison.png'")
