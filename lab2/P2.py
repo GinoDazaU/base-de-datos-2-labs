@@ -148,17 +148,17 @@ class AVL:
         # Ninguna rotacion
         return current
 
-    def delete_aux(self, file: TextIO, key: int, current: int) -> int:
+    def remove_aux(self, file: TextIO, key: int, current: int) -> int:
         if current == -1:
             return current
         
         currentRecord = self.read_register(file, current)
-
+        
         if key < currentRecord.id:
-            currentRecord.left = self.delete_aux(file, key, currentRecord.left)
+            currentRecord.left = self.remove_aux(file, key, currentRecord.left)
             self.write_reg(file, current, currentRecord)
-        elif key < currentRecord.id:
-            currentRecord.right = self.delete_aux(file, key, currentRecord.right)
+        elif key > currentRecord.id:
+            currentRecord.right = self.remove_aux(file, key, currentRecord.right)
             self.write_reg(file, current, currentRecord)
         else:
             if currentRecord.left == -1 or currentRecord.right == -1:
@@ -177,44 +177,64 @@ class AVL:
             else:
                 temp = self.minValueNode(file, currentRecord.right)
                 tempRecord = self.read_register(file, temp)
-                currentRecord.id, currentRecord.nombre, currentRecord.cantidad_vendida, currentRecord.precio, currentRecord.fecha = tempRecord.id, tempRecord.nombre, tempRecord.cantidad_vendida, tempRecord.precio, tempRecord.fecha
-                currentRecord.right = self.delete_aux(tempRecord.id, currentRecord.right)
+
+                currentRecord.id = tempRecord.id
+                currentRecord.nombre = tempRecord.nombre
+                currentRecord.cantidad_vendida = tempRecord.cantidad_vendida
+                currentRecord.precio = tempRecord.precio
+                currentRecord.fecha = tempRecord.fecha
+
+                currentRecord.right = self.remove_aux(file, tempRecord.id, currentRecord.right)
                 self.write_reg(file, current, currentRecord)
             
-            if current == -1:
-                return current
-            
-            leftHeight = self.getHeight(currentRecord.left)
-            rightHeight = self.getHeight(currentRecord.right)
-            currentRecord.height = max(leftHeight, rightHeight) + 1
-
-            balance = self.getBalance(current)
-            leftBalance = self.getBalance(file, currentRecord.left)
-            rightBalance = self.getBalance(file, currentRecord.right)
-
-            # Rotaciones
-
-            # Left-left
-            if balance > 1 and leftBalance >= 0:
-                return self.rightRotate(file, current)
-
-            # Left-right
-            if balance > 1 and leftBalance < 0:
-                currentRecord.left = self.leftRotate(file, currentRecord.left)
-                self.write_reg(file, current, currentRecord)
-                return self.rightRotate(file, current)
-
-            # Right-right
-            if balance < -1 and rightBalance <= 0:
-                return self.leftRotate(file, current)
-
-            # Right-left
-            if balance < -1 and rightBalance > 0:
-                currentRecord.right = self.rightRotate(file, currentRecord.right)
-                self.write_reg(file, current, currentRecord)
-                return self.leftRotate(file, current)
-            
+        if current == -1:
             return current
+            
+        leftHeight = self.getHeight(file, currentRecord.left)
+        rightHeight = self.getHeight(file, currentRecord.right)
+        currentRecord.height = max(leftHeight, rightHeight) + 1
+
+        balance = self.getBalance(file, current)
+        leftBalance = self.getBalance(file, currentRecord.left)
+        rightBalance = self.getBalance(file, currentRecord.right)
+
+        # Rotaciones
+        # Left-left
+        if balance > 1 and leftBalance >= 0:
+            return self.rightRotate(file, current)
+
+        # Left-right
+        if balance > 1 and leftBalance < 0:
+            currentRecord.left = self.leftRotate(file, currentRecord.left)
+            self.write_reg(file, current, currentRecord)
+            return self.rightRotate(file, current)
+
+        # Right-right
+        if balance < -1 and rightBalance <= 0:
+            return self.leftRotate(file, current)
+
+        # Right-left
+        if balance < -1 and rightBalance > 0:
+            currentRecord.right = self.rightRotate(file, currentRecord.right)
+            self.write_reg(file, current, currentRecord)
+            return self.leftRotate(file, current)
+        
+        return current
+
+    def range_search_aux(self, file: TextIO, init_key: int, end_key: int, current: int, result: list[Venta]):
+        if current == -1:
+            return
+        
+        currentRecord = self.read_register(file, current)
+
+        if currentRecord.id >= init_key and currentRecord.id <= end_key:
+            result.append(currentRecord)
+
+        if currentRecord.id > init_key:
+            self.range_search_aux(file, init_key, end_key, currentRecord.left, result)
+
+        if currentRecord.id < end_key:
+            self.range_search_aux(file, init_key, end_key, currentRecord.right, result)
 
     def insert(self, record: Venta):
         with open(self.filename, "r+b") as file:
@@ -225,6 +245,12 @@ class AVL:
             file.seek(0)
             file.write(struct.pack("i", self.root))
 
+    def remove(self, key: int) -> int:
+        with open(self.filename, "r+b") as file:
+            self.root = self.remove_aux(file, key, self.root)
+            file.seek(0)
+            file.write(struct.pack("i", self.root))
+        
     def search(self, key: int) -> Venta:
         with open(self.filename, "rb") as file:
             file.seek(0)
@@ -243,12 +269,11 @@ class AVL:
                 else:
                     return currentRecord
 
-    def remove(self, key: int) -> int:
-        pass
-
-    def rangeSearch(self, init_key: int, end_key: int):
-        pass
-    
+    def range_search(self, init_key: int, end_key: int) -> list[Venta]:
+        list = []
+        with open(self.filename, "rb") as file:
+            self.range_search_aux(file, init_key, end_key, self.root, list)
+        return list
 
     def load_from_csv(self, csv_filename):
         """Loads and inserts all records from a CSV file"""
@@ -271,11 +296,7 @@ class AVL:
                     print(f"Error processing row {row}: {e}")
                     continue
 
-try:
-    os.remove("./avl_data.dat")
-finally:
-    avl = AVL("avl_data.dat")
-
+def test(avl: AVL):
     # venta1 = Venta(0, "item1", 10, 5, "2025-04-03")
     # venta2 = Venta(4, "item2", 10, 5, "2025-04-03")
     # venta3 = Venta(2, "item3", 10, 5, "2025-04-03")
@@ -286,9 +307,53 @@ finally:
     # avl.insert(venta3)
     # avl.insert(venta4)
 
-    for i in range(100):
-        id = random.randint(0, 1000)
+    # avl.remove(4)
+
+    # print(avl.search(4))
+
+    ids = []
+
+    for i in range(1000):
+        id = random.randint(0, 10000)
+        while id in ids:
+            id = random.randint(0, 10000)
+        ids.append(id)
         venta = Venta(id, "item" + str(i), 1, 5.12, "2025-04-03")
         avl.insert(venta)
 
-    print(avl.search(id).nombre)
+    for id in ids:
+        if avl.search(id) == None:
+            print("fue todo")
+
+    sorted_ids = ids.copy()
+
+    sorted_ids.sort()
+
+    new_list = sorted_ids[100:-100]
+
+    ranged_search = avl.range_search(sorted_ids[100], sorted_ids[-101])
+
+    ranged_search_ids = []
+
+    for record in ranged_search:
+        ranged_search_ids.append(record.id)
+
+    ranged_search_ids.sort()
+
+    if new_list != ranged_search_ids:
+        print("fue todo")
+
+    for id in ids:
+        avl.remove(id)
+        if avl.search(id) != None:
+            print("fue todo")
+
+    print(avl.root)
+
+def main():
+    try:
+        os.remove("./avl_data.dat")
+    finally:
+        avl = AVL("avl_data.dat")
+        test(avl)
+        # avl.load_from_csv("sales_dataset.csv")
