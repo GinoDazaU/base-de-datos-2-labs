@@ -1,4 +1,4 @@
-from AVL import AVL
+from P2 import AVL
 import os
 import time
 import random
@@ -34,7 +34,7 @@ existing_ids = [i for i in range(1, db.main_size + 1)]  # IDs existentes
 for _ in range(NUM_SEARCHES):
     target_id = random.choice(existing_ids)
     start_time = time.perf_counter()
-    db.search_record(target_id)
+    db.search(target_id)
     search_times.append(time.perf_counter() - start_time)
 
 print(f"Tiempo promedio: {sum(search_times)/len(search_times):.6f}s")
@@ -49,7 +49,7 @@ for _ in range(NUM_RANGE_SEARCHES):
     start_id = random.randint(1, db.main_size//2)
     end_id = start_id + random.randint(5, 50)
     start_time = time.perf_counter()
-    db.search_range(start_id, end_id)
+    db.rangeSearch(start_id, end_id)
     range_times.append(time.perf_counter() - start_time)
 
 print(f"Tiempo promedio: {sum(range_times)/len(range_times):.6f}s\n")
@@ -61,7 +61,7 @@ delete_candidates = random.sample(existing_ids, min(NUM_DELETIONS, len(existing_
 
 for target_id in delete_candidates:
     start_time = time.perf_counter()
-    db.delete_record(target_id)
+    db.remove(target_id)
     delete_times.append(time.perf_counter() - start_time)
 
 print(f"Tiempo promedio: {sum(delete_times)/len(delete_times):.6f}s")
@@ -90,5 +90,5 @@ for bar in bars:
              ha='center', va='bottom')
 
 plt.tight_layout()
-plt.savefig('p1_performance.png')
-print("Gráfico guardado como 'p1_performance.png'")
+plt.savefig('p2_performance.png')
+print("Gráfico guardado como 'p2_performance.png'")
