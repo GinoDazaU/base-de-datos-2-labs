@@ -2,6 +2,7 @@ import struct
 import os
 import random
 from typing import TextIO
+import csv
 
 class Venta:
     def __init__(self, id: int, nombre: str, cantidad_vendida: int, precio: float, fecha: str, left: int = -1, right: int = -1, height: int  = 0):
@@ -170,6 +171,28 @@ class AVL:
 
     def rangeSearch(self, init_key: int, end_key: int):
         pass
+    
+
+    def load_from_csv(self, csv_filename):
+        """Loads and inserts all records from a CSV file"""
+        with open(csv_filename, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                try:
+                    # Parse CSV row (assuming format: id,nombre,cantidad,precio,fecha)
+                    id = int(row[0])
+                    nombre = row[1]
+                    cantidad = int(row[2])
+                    precio = float(row[3])
+                    fecha = row[4]
+                    
+                    # Create and insert record
+                    venta = Venta(id, nombre, cantidad, precio, fecha)
+                    self.insert(venta)
+                    
+                except (ValueError, IndexError) as e:
+                    print(f"Error processing row {row}: {e}")
+                    continue
 
 try:
     os.remove("./avl_data.dat")

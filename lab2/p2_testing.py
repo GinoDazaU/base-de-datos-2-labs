@@ -1,4 +1,4 @@
-from AVL import AVL
+from P2 import AVL
 import os
 import time
 import random
