@@ -1,11 +1,11 @@
-from p1 import SecuentialRecorder
+from AVL import AVL
 import os
 import time
 import random
 import matplotlib.pyplot as plt
 
 # Configuración
-TEST_FILE = "p1_testing.dat"
+TEST_FILE = "p2_testing.dat"
 CSV_FILE = "sales_dataset.csv"
 NUM_SEARCHES = 10000
 NUM_RANGE_SEARCHES = 10000
@@ -15,7 +15,7 @@ NUM_DELETIONS = 500
 if os.path.exists(TEST_FILE):
     os.remove(TEST_FILE)
 
-db = SecuentialRecorder(TEST_FILE)
+db = AVL(TEST_FILE)
 
 # 1. Prueba de inserción (todo el CSV)
 print("=== PRUEBA DE INSERCIÓN ===")
