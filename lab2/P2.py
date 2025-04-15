@@ -88,6 +88,18 @@ class AVL:
 
         return newPos
 
+    def minValueNode(self, file: TextIO, pos: int) -> int:
+        if pos == -1:
+            return -1
+        
+        record = self.read_register(file, pos)
+
+        while record.left != -1:
+            pos = record.left
+            record = self.read_register(file, pos)
+        
+        return pos
+
     def insert_aux(self, file: TextIO, record: Venta, current: int, newPos: int) -> int:
         if current == -1:
             return newPos
@@ -112,8 +124,6 @@ class AVL:
         
         # Rotaciones
 
-        print("a")
-
         # Left-left
         if balance > 1 and leftBalance >= 0:
             return self.rightRotate(file, current)
@@ -136,6 +146,74 @@ class AVL:
         
         # Ninguna rotacion
         return current
+
+    def delete_aux(self, file: TextIO, key: int, current: int) -> int:
+        if current == -1:
+            return current
+        
+        currentRecord = self.read_register(file, current)
+
+        if key < currentRecord.id:
+            currentRecord.left = self.delete_aux(file, key, currentRecord.left)
+            self.write_reg(file, current, currentRecord)
+        elif key < currentRecord.id:
+            currentRecord.right = self.delete_aux(file, key, currentRecord.right)
+            self.write_reg(file, current, currentRecord)
+        else:
+            if currentRecord.left == -1 or currentRecord.right == -1:
+                temp = -1
+                if currentRecord.left != -1:
+                    temp = currentRecord.left
+                else:
+                    temp = currentRecord.right
+
+                if temp == -1:
+                    temp = current
+                    current = -1
+                else:
+                    self.write_reg(file, current, self.read_register(file, temp))
+                # delete temp
+            else:
+                temp = self.minValueNode(file, currentRecord.right)
+                tempRecord = self.read_register(file, temp)
+                currentRecord.id, currentRecord.nombre, currentRecord.cantidad_vendida, currentRecord.precio, currentRecord.fecha = tempRecord.id, tempRecord.nombre, tempRecord.cantidad_vendida, tempRecord.precio, tempRecord.fecha
+                currentRecord.right = self.delete_aux(tempRecord.id, currentRecord.right)
+                self.write_reg(file, current, currentRecord)
+            
+            if current == -1:
+                return current
+            
+            leftHeight = self.getHeight(currentRecord.left)
+            rightHeight = self.getHeight(currentRecord.right)
+            currentRecord.height = max(leftHeight, rightHeight) + 1
+
+            balance = self.getBalance(current)
+            leftBalance = self.getBalance(file, currentRecord.left)
+            rightBalance = self.getBalance(file, currentRecord.right)
+
+            # Rotaciones
+
+            # Left-left
+            if balance > 1 and leftBalance >= 0:
+                return self.rightRotate(file, current)
+
+            # Left-right
+            if balance > 1 and leftBalance < 0:
+                currentRecord.left = self.leftRotate(file, currentRecord.left)
+                self.write_reg(file, current, currentRecord)
+                return self.rightRotate(file, current)
+
+            # Right-right
+            if balance < -1 and rightBalance <= 0:
+                return self.leftRotate(file, current)
+
+            # Right-left
+            if balance < -1 and rightBalance > 0:
+                currentRecord.right = self.rightRotate(file, currentRecord.right)
+                self.write_reg(file, current, currentRecord)
+                return self.leftRotate(file, current)
+            
+            return current
 
     def insert(self, record: Venta):
         with open(self.filename, "r+b") as file:
@@ -164,8 +242,7 @@ class AVL:
                 else:
                     return currentRecord
 
-
-    def remove(self, key: int) -> int: # ta complicao
+    def remove(self, key: int) -> int:
         pass
 
     def rangeSearch(self, init_key: int, end_key: int):
