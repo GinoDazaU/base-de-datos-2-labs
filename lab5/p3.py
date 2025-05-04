@@ -1,8 +1,9 @@
 import psycopg2
+import nltk
 import pandas as pd
 import os
 from dotenv import load_dotenv
-import nltk
+from collections import Counter
 
 nltk.download('punkt')
 load_dotenv()
@@ -40,9 +41,14 @@ noticias_df = fetch_data()
 stopwords_set = load_stopwords()
 stemmer = nltk.SnowballStemmer("spanish")
 
-def preprocess(text: str):
+def preprocess(text: str) -> list:
     text = text.lower()
     tokens = nltk.word_tokenize(text) 
     filtered = [t for t in tokens if t.isalpha() and t not in stopwords_set]
     stemmed = [stemmer.stem(t) for t in filtered]
     return stemmed
+
+def compute_bow(text: str) -> dict:
+    tokens = preprocess(text)
+    freq = Counter(tokens)
+    return dict(freq)
