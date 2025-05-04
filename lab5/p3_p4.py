@@ -1,6 +1,7 @@
+import pandas as pd
 import psycopg2
 import nltk
-import pandas as pd
+import json
 import os
 from dotenv import load_dotenv
 from collections import Counter
@@ -52,3 +53,21 @@ def compute_bow(text: str) -> dict:
     tokens = preprocess(text)
     freq = Counter(tokens)
     return dict(freq)
+
+def update_bow_in_db(df: pd.DataFrame):
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    for index, row in df.iterrows():
+        bow_json = json.dumps(compute_bow(row['contenido']))
+        cursor.execute("""
+            UPDATE noticias
+            SET bag_of_words = %s
+            WHERE id = %s;
+        """, (bow_json, row['id']))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+update_bow_in_db(noticias_df)
