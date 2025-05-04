@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from collections import Counter
 
 nltk.download('punkt')
+nltk.download('punkt_tab')
 load_dotenv()
 
 dbname = os.getenv("DBNAME")
@@ -62,7 +63,7 @@ def update_bow_in_db(df: pd.DataFrame):
         bow_json = json.dumps(compute_bow(row['contenido']))
         cursor.execute("""
             UPDATE noticias
-            SET bag_of_words = %s
+            SET bag_of_words = %s::jsonb
             WHERE id = %s;
         """, (bow_json, row['id']))
     
