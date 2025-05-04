@@ -5,8 +5,8 @@
 
 # pip install psycopg2-binary nltk scikit-learn pandas
 
-import nltk
-nltk.download('punkt')
+# import nltk
+# nltk.download('punkt')
 
 """
 CREATE TABLE noticias (
@@ -35,11 +35,19 @@ CREATE TABLE stopwords (
 import psycopg2
 import pandas as pd
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 dbname = os.getenv("DBNAME")
 dbuser = os.getenv("DBUSER")
 dbpass = os.getenv("DBPASS")
 dbhost = os.getenv("DBHOST")
+
+# print(dbname)
+# print(dbuser)
+# print(dbpass)
+# print(dbhost)
 
 def connect_db():
     conn = psycopg2.connect(
@@ -94,6 +102,8 @@ test_queries = [
     "nonexistent term",  # no debería devolver resultados
 ]
 
+"""
+
 for query in test_queries:
     print(f"Probando consulta: '{query}'")
     results = apply_boolean_query(query)
@@ -104,5 +114,5 @@ for query in test_queries:
         print("Resultados encontrados:")
         print(results[['id', 'text_column']].head())
     print("-" * 50)
-
+"""
 # Pregunta 7
