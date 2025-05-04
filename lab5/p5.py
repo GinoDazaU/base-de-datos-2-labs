@@ -175,8 +175,9 @@ def apply_boolean_query(query, db_connection):
 
         sql_query = parsed.get_sql_query()
 
+        print(sql_query)
+
         df = pd.read_sql(sql_query, db_connection)
-        db_connection.close()
         return df
     except:
         return pd.DataFrame()
@@ -199,3 +200,4 @@ def test(db_connection):
             print("Resultados encontrados:")
             print(results[['id', 'text_column']].head())
         print("-" * 50)
+    db_connection.close()
