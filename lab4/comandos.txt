@@ -1,0 +1,1 @@
+\copy cities(id, name, state_id, state_code, state_name, country_id, country_code, country_name, latitude, longitude) from 'c:/users/ginod/desktop/base-de-datos-2-labs/lab4/cities.csv' delimiter ',' csv header;

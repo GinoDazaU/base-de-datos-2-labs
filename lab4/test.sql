@@ -1,0 +1,64 @@
+-- Rango de 1 minuto
+VACUUM (FULL, ANALYZE) ;  -- Ejecuta el VACUUM FULL sin estar en una transacción
+
+-- B+ Tree
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_btree
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 00:01:00';
+
+-- BRIN
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_brin
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 00:01:00';
+
+-- Rango de 1 hora
+VACUUM FULL;  -- Ejecuta VACUUM FULL nuevamente, fuera de cualquier transacción
+
+-- B+ Tree.
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_btree
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 01:00:00';
+
+-- BRIN
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_brin
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 01:00:00';
+
+-- Rango de 1 día
+VACUUM FULL;
+
+-- B+ Tree
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_btree
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-02 00:00:00';
+
+-- BRIN
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_brin
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-06-02 00:00:00';
+
+-- Rango de 1 mes
+VACUUM FULL;
+
+-- B+ Tree
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_btree
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-07-01 00:00:00';
+
+-- BRIN
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_brin
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-07-01 00:00:00';
+
+-- Rango de 2 meses
+VACUUM FULL;
+
+-- B+ Tree
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_btree
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-08-01 00:00:00';
+
+-- BRIN
+EXPLAIN ANALYZE
+SELECT * FROM temperatura_brin
+WHERE fecha BETWEEN '2024-06-01 00:00:00' AND '2024-08-01 00:00:00';
