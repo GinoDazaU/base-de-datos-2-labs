@@ -4,10 +4,19 @@
 
 from enum import Enum, auto
 import pandas as pd
+import warnings
 import nltk
 from abc import ABC, abstractmethod
+import spacy
+
+warnings.filterwarnings("ignore", category=UserWarning, module='pandas')
+
+nlp = spacy.load("es_core_news_sm")
 
 stemmer = nltk.SnowballStemmer("spanish")
+
+# method = "stemming"
+method = "lemmatization"
 
 class Token():
     class Type():
@@ -127,7 +136,13 @@ class TermExpression(Expression):
         self.term = term
 
     def get_sql_query(self):
-        return f"bag_of_words ? '{stemmer.stem(self.term)}'"
+        if method == "stemming":
+            return f"bag_of_words ? '{stemmer.stem(self.term)}'"
+        elif method == "lemmatization":
+            return f"bag_of_words ? '{nlp(self.term)[0].lemma_}'"
+            # return f"bag_of_words ? '{lemmatizer.lemmatize(self.term)}'"
+        else:
+            raise Exception("Unknown method")
 
 class ParenthesisExpression(Expression):
     def __init__(self, exp : Expression):
@@ -182,20 +197,6 @@ class Parser():
         except ParseError as e:
             print(e.error)
             return Query()
-    
-    """ Gramatica
-    <expresion> ::= <or_expr>
-
-    <or_expr> ::= <and_expr> ( "OR" <and_expr> )*
-
-    <and_expr> ::= <and_not_expr> ( "AND" <and_not_expr> )*
-
-    <and_not_expr> ::= <not_expr> ( "AND NOT" <not_expr> )*
-
-    <not_expr> ::= <termino> | "(" <expresion> ")"
-
-    <termino> ::= IDENTIFICADOR
-    """
 
     def parse_query(self) -> Query:
         query = Query()
@@ -282,4 +283,9 @@ def test(db_connection):
             print("Resultados encontrados:")
             print(results[['id', 'contenido']].head())
         print("-" * 50)
+        print()
     db_connection.close()
+
+if __name__ == "__main__":
+    query = "salud AND pandemia OR vacunas"
+    print(create_sql_query(query))
