@@ -244,14 +244,14 @@ def test_scanner(scanner : Scanner) -> None:
             print("Scanner error: unknown token")
             break
 
+def create_sql_query(query):
+    scanner = Scanner(query)
+    parser = Parser(scanner)
+    return parser.parse().get_sql_query()
+
 def apply_boolean_query(query, db_connection):
     try:
-        scanner = Scanner(query)
-        parser = Parser(scanner)
-
-        parsed = parser.parse()
-
-        sql_query = parsed.get_sql_query()
+        sql_query = create_sql_query(query)
 
         print(f"Ejecutando consulta sql: {sql_query}")
 
