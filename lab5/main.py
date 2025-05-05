@@ -44,11 +44,6 @@ dbuser = os.getenv("DBUSER")
 dbpass = os.getenv("DBPASS")
 dbhost = os.getenv("DBHOST")
 
-# print(dbname)
-# print(dbuser)
-# print(dbpass)
-# print(dbhost)
-
 def connect_db():
     conn = psycopg2.connect(
         dbname=dbname,
@@ -66,6 +61,8 @@ def fetch_data():
     return df
 
 noticias_df = fetch_data()
+
+print(noticias_df)
 
 # Pregunta 3
 
@@ -87,32 +84,8 @@ update_bow_in_db(noticias_df)
 
 # Pregunta 5
 
-# SELECT * FROM noticias WHERE bag_of_words ? 'keyword';
+from p5 import test as p5test
 
-def apply_boolean_query(query):
-    # Construir la condición de búsqueda a partir de la query booleana
-    # Ejecutar la consulta en la base de datos
-    # Retornar un DataFrame con los resultados
-    return pd.DataFrame()
+p5test(connect_db())
 
-test_queries = [
-    "transformación AND sostenible", # Consulta con AND
-    "México OR Perú",  # Consulta con OR
-    "México AND-NOT Perú",  # Consulta con AND-NOT
-    "nonexistent term",  # no debería devolver resultados
-]
-
-"""
-
-for query in test_queries:
-    print(f"Probando consulta: '{query}'")
-    results = apply_boolean_query(query)
-
-    if results.empty:
-        print("No se encontraron documentos.")
-    else:
-        print("Resultados encontrados:")
-        print(results[['id', 'text_column']].head())
-    print("-" * 50)
-"""
 # Pregunta 7
