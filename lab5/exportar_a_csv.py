@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv('C:/Users/renat/OneDrive/Documentos/2025/UTEC/2025-I/BDII/BDII-Labstrio/base-de-datos-2-labs/lab5/environment.env')
 
-def export_query_to_csv(query, output_path):
+def export_query_results(query, output_path, file_format='csv'):
     conn = psycopg2.connect(
         dbname=os.getenv("DBNAME"),
         user=os.getenv("DBUSER"),
@@ -15,10 +15,16 @@ def export_query_to_csv(query, output_path):
     
     try:
         df = pd.read_sql(query, conn)
-        df.to_csv(output_path, index=False)
-        print(f"Consulta exportada a {output_path}")
+        if file_format == 'csv':
+            df.to_csv(output_path, index=False)
+        elif file_format == 'json':
+            df.to_json(output_path, orient='records', lines=True, force_ascii=False)
+        else:
+            raise ValueError("Formato no soportado. Usa 'csv' o 'json'.")
+        print(f"Consulta exportada a {output_path} en formato {file_format}")
     finally:
         conn.close()
 
-query = "SELECT * FROM noticias_mitad;"
-export_query_to_csv(query, "noticias_mitad.csv")
+export_query_results("SELECT * FROM noticias;", "noticias.csv", "csv")
+
+export_query_results("SELECT * FROM noticias;", "noticias.json", "json")
