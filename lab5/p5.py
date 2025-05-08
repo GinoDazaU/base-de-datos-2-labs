@@ -140,7 +140,6 @@ class TermExpression(Expression):
             return f"bag_of_words ? '{stemmer.stem(self.term)}'"
         elif method == "lemmatization":
             return f"bag_of_words ? '{nlp(self.term)[0].lemma_}'"
-            # return f"bag_of_words ? '{lemmatizer.lemmatize(self.term)}'"
         else:
             raise Exception("Unknown method")
 
@@ -287,5 +286,5 @@ def test(db_connection):
     db_connection.close()
 
 if __name__ == "__main__":
-    query = "salud AND pandemia OR vacunas"
+    query = "((educación OR ciencia) AND gobierno) OR ((México OR Perú) AND-NOT (China OR Chile)) OR (transformación AND sostenible OR startup)"
     print(create_sql_query(query))

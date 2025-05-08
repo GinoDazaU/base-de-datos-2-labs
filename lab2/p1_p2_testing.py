@@ -1,5 +1,5 @@
-from p1 import SecuentialRecorder
-from p2 import AVL
+from P1 import SecuentialRecorder
+from P2 import AVL
 import os
 import time
 import random

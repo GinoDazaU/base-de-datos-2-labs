@@ -8,13 +8,14 @@ from collections import Counter
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import SnowballStemmer
 import time
+import spacy
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+# nltk.download('punkt')
+# nltk.download('punkt_tab')
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
 
-load_dotenv(dotenv_path='C:/Users/renat/OneDrive/Documentos/2025/UTEC/2025-I/BDII/BDII-Labstrio/base-de-datos-2-labs/lab5/environment.env')
+load_dotenv()
 
 dbname = os.getenv("DBNAME")
 dbuser = os.getenv("DBUSER")
@@ -52,6 +53,9 @@ stopwords_set = load_stopwords()
 stemmer = SnowballStemmer("spanish")
 lemmatizer = WordNetLemmatizer()
 
+nlp = spacy.load("es_core_news_sm")
+
+
 def preprocess_stemming(text: str) -> list:
     text = text.lower()
     tokens = nltk.word_tokenize(text, language='spanish')
@@ -60,10 +64,12 @@ def preprocess_stemming(text: str) -> list:
     return stemmed
 
 def preprocess_lemmatization(text: str) -> list:
-    text = text.lower()
-    tokens = nltk.word_tokenize(text, language='spanish')
-    filtered = [t for t in tokens if t.isalpha() and t not in stopwords_set]
-    lemmatized = [lemmatizer.lemmatize(t) for t in filtered]
+    text = nlp(text.lower())
+    lemmatized = [
+        token.lemma_
+        for token in text
+        if token.is_alpha and token.lemma_ not in stopwords_set
+    ]
     return lemmatized
 
 def compute_bow(text: str, method: str) -> dict:
@@ -89,15 +95,10 @@ def update_bow_in_db(news_id: int, bow_data: dict):
 
 
 def process_and_save_bow(df: pd.DataFrame, method: str):
-    start_time = time.time()
 
     for index, row in df.iterrows():
         bow = compute_bow(row['contenido'], method)
         update_bow_in_db(row['id'], bow)
-
-    end_time = time.time()
-    return end_time - start_time
-
 
 def compare_and_save():
     print("Procesando y guardando con Stemming...")
@@ -108,4 +109,4 @@ def compare_and_save():
     time_lemma = process_and_save_bow(noticias_df, "lemmatization")
     print(f"Lematización completada en {time_lemma:.2f} segundos")
 
-compare_and_save()
+process_and_save_bow(noticias_df, "lemmatization")
