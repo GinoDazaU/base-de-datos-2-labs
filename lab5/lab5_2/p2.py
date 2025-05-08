@@ -1,3 +1,5 @@
+from load import *
+
 class InvertedIndex:
     def __init__(self):
         self.index = {}
@@ -7,6 +9,10 @@ class InvertedIndex:
     def build_from_db(self):
         # Leer desde PostgreSQL todos los bag of words
         # Construir el índice invertido, el idf y la norma (longitud) de cada documento
+
+        noticias_df = fetch_data()
+
+        print(noticias_df)
         
         """
         indice  = {
