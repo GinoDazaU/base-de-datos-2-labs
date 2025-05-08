@@ -43,12 +43,13 @@ noticias_df = fetch_data()
 stopwords_set = load_stopwords()
 stemmer = nltk.SnowballStemmer("spanish")
 
+
 def preprocess(text: str) -> list:
     text = text.lower()
     tokens = nltk.word_tokenize(text) 
     filtered = [t for t in tokens if t.isalpha() and t not in stopwords_set]
     stemmed = [stemmer.stem(t) for t in filtered]
-    return stemmed
+    return stem
 
 def compute_bow(text: str) -> dict:
     tokens = preprocess(text)
