@@ -4,13 +4,26 @@
 
 from enum import Enum, auto
 import pandas as pd
+import warnings
+import nltk
+from abc import ABC, abstractmethod
+import spacy
+
+warnings.filterwarnings("ignore", category=UserWarning, module='pandas')
+
+nlp = spacy.load("es_core_news_sm")
+
+stemmer = nltk.SnowballStemmer("spanish")
+
+# method = "stemming"
+method = "lemmatization"
 
 class Token():
     class Type():
         (
-            TERM, OP, END, ERR
-        ) = range(4)
-    token_names = ["TERM", "OP", "END", "ERR"]
+            TERM, AND, OR, ANDNOT, LPAR, RPAR, END, ERR
+        ) = range(8)
+    token_names = ["TERM", "AND", "OR", "ANDNOT", "LPAR", "RPAR", "END", "ERR"]
     def __init__(self, type : Type, lexema : str = ""):
         self.type = type
         self.lexema = lexema
@@ -44,12 +57,20 @@ class Scanner():
                     c = self.input[self.current]
                     self.start_lexema()
                     state = 0
+                elif c == '(':
+                    self.current += 1
+                    c = self.input[self.current]
+                    return Token(Token.Type.LPAR)
+                elif c == ')':
+                    self.current += 1
+                    c = self.input[self.current]
+                    return Token(Token.Type.RPAR)
                 elif c == '\0':
                     return Token(Token.Type.END)
                 else:
                     state = 1
             elif state == 1:
-                if not c.isspace() and c != '\0':
+                if not c.isspace() and c not in ['\0', '(', ')']:
                     self.current += 1
                     c = self.input[self.current]
                     state = 1
@@ -57,8 +78,12 @@ class Scanner():
                     state = 2
             elif state == 2:
                 lexema = self.get_lexema()
-                if lexema in ["AND", "OR", "AND-NOT"]:
-                    return Token(Token.Type.OP, lexema)
+                if lexema == "AND":
+                    return Token(Token.Type.AND)
+                elif lexema == "OR":
+                    return Token(Token.Type.OR)
+                elif lexema == "AND-NOT":
+                    return Token(Token.Type.ANDNOT)
                 else:
                     return Token(Token.Type.TERM, lexema)
 
@@ -69,14 +94,32 @@ class Op(Enum):
     
 class Query():
     def __init__(self):
-        self.left : str = None
-        self.op : Op = None
-        self.right : str = None
+        self.expression : Expression = None
 
     def get_sql_query(self) -> str:
-        op = ""
-        if not self.op or not self.left or not self.right:
+        if not self.expression:
             raise Exception("Invalid Query")
+        
+        return f"SELECT * FROM noticias WHERE {self.expression.get_sql_query()}"
+
+class Expression(ABC):
+    def __init__(self):
+        pass
+    
+    @abstractmethod
+    def get_sql_query(self):
+        pass
+
+class BinaryExpression(Expression):
+    def __init__(self, left : Expression, op : Op, right : Expression):
+        super().__init__()
+        self.left = left
+        self.op = op
+        self.right = right
+
+    def get_sql_query(self):
+        op = ""
+
         match self.op:
             case Op.AND:
                 op = "AND"
@@ -84,8 +127,30 @@ class Query():
                 op = "OR"
             case Op.ANDNOT:
                 op = "AND NOT"
-        sql_query = f"SELECT * FROM noticias WHERE bag_of_words ? '{self.left}' {op} bag_of_words ? '{self.right}'"
-        return sql_query
+
+        return f"{self.left.get_sql_query()} {op} {self.right.get_sql_query()}"
+
+class TermExpression(Expression):
+    def __init__(self, term : str):
+        super().__init__()
+        self.term = term
+
+    def get_sql_query(self):
+        if method == "stemming":
+            return f"bag_of_words ? '{stemmer.stem(self.term)}'"
+        elif method == "lemmatization":
+            return f"bag_of_words ? '{nlp(self.term)[0].lemma_}'"
+            # return f"bag_of_words ? '{lemmatizer.lemmatize(self.term)}'"
+        else:
+            raise Exception("Unknown method")
+
+class ParenthesisExpression(Expression):
+    def __init__(self, exp : Expression):
+        super().__init__()
+        self.exp = exp
+
+    def get_sql_query(self):
+        return f"({self.exp.get_sql_query()})"
 
 class ParseError(Exception):
     def __init__(self, error : str):
@@ -132,29 +197,43 @@ class Parser():
         except ParseError as e:
             print(e.error)
             return Query()
-    
+
     def parse_query(self) -> Query:
         query = Query()
-        if not self.match(Token.Type.TERM):
-            self.parse_error("expected a term at the start of the query")
-        query.left = self.previous.lexema
-        if not self.match(Token.Type.OP):
-            self.parse_error("expected an operation after the term")
-        match self.previous.lexema:
-            case "AND":
-                query.op = Op.AND
-            case "OR":
-                query.op = Op.OR
-            case "AND-NOT":
-                query.op = Op.ANDNOT
-            case _:
-                self.parse_error("unknown operation")
-        if not self.match(Token.Type.TERM):
-            self.parse_error("expected a term after the opreation")
-        query.right = self.previous.lexema
-        if not self.current.type == Token.Type.END:
-            self.parse_error("unexpected items after query")
+        query.expression = self.parse_or()
         return query
+
+    def parse_or(self) -> Expression:
+        exp = self.parse_and()
+        while self.match(Token.Type.OR):
+            right = self.parse_and()
+            exp = BinaryExpression(exp, Op.OR, right)
+        return exp
+
+    def parse_and(self) -> Expression:
+        exp = self.parse_and_not()
+        while self.match(Token.Type.AND):
+            right = self.parse_and_not()
+            exp = BinaryExpression(exp, Op.AND, right)
+        return exp
+    
+    def parse_and_not(self) -> Expression:
+        exp = self.parse_term()
+        while self.match(Token.Type.ANDNOT):
+            right = self.parse_term()
+            exp = BinaryExpression(exp, Op.ANDNOT, right)
+        return exp
+    
+    def parse_term(self) -> Expression:
+        if self.match(Token.Type.TERM):
+            return TermExpression(self.previous.lexema)
+        elif self.match(Token.Type.LPAR):
+            exp = ParenthesisExpression(self.parse_or())
+            if not self.match(Token.Type.RPAR):
+                self.parse_error("expected ')'")
+            return exp
+        else:
+            self.parse_error("expected term or '('")
 
 def test_scanner(scanner : Scanner) -> None:
     while True:
@@ -166,16 +245,16 @@ def test_scanner(scanner : Scanner) -> None:
             print("Scanner error: unknown token")
             break
 
+def create_sql_query(query):
+    scanner = Scanner(query)
+    parser = Parser(scanner)
+    return parser.parse().get_sql_query()
+
 def apply_boolean_query(query, db_connection):
     try:
-        scanner = Scanner(query)
-        parser = Parser(scanner)
+        sql_query = create_sql_query(query)
 
-        parsed = parser.parse()
-
-        sql_query = parsed.get_sql_query()
-
-        print(sql_query)
+        print(f"Ejecutando consulta sql: {sql_query}")
 
         df = pd.read_sql(sql_query, db_connection)
         return df
@@ -184,10 +263,14 @@ def apply_boolean_query(query, db_connection):
 
 def test(db_connection):
     test_queries = [
-        "transformación AND sostenible", # Consulta con AND
-        "México OR Perú",  # Consulta con OR
-        "México AND-NOT Perú",  # Consulta con AND-NOT
-        "nonexistent term",  # no debería devolver resultados
+        "transformación AND sostenible OR startup",
+        "(México OR Perú) AND-NOT (China OR Chile)",
+        "inflación OR recesión OR desempleo",
+        "guerra OR paz AND europa",
+        "salud AND pandemia OR vacuna",
+        "(educación OR ciencia) AND gobierno",
+        "(amazon AND google) OR (microsoft AND apple) AND facebook",
+        "((apple AND iphone) OR (samsung AND android)) AND-NOT huawei"
     ]
 
     for query in test_queries:
@@ -198,6 +281,11 @@ def test(db_connection):
             print("No se encontraron documentos.")
         else:
             print("Resultados encontrados:")
-            print(results[['id', 'text_column']].head())
+            print(results[['id', 'contenido']].head())
         print("-" * 50)
+        print()
     db_connection.close()
+
+if __name__ == "__main__":
+    query = "salud AND pandemia OR vacunas"
+    print(create_sql_query(query))
