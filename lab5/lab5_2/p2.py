@@ -32,7 +32,7 @@ class InvertedIndex:
             self.length[doc_id] = math.sqrt(norm)
 
         for word, doc_freq in df.items():
-            self.idf[word] = math.log(n / doc_freq)
+            self.idf[word] = math.log10(n / doc_freq)
     
     def L(self, word):
         return self.index.get(word, [])
@@ -52,12 +52,12 @@ class InvertedIndex:
                 continue
             documents = self.index[token]
             idf = self.idf[token]
-            wtq = (1 + math.log2(qtf))*idf
+            wtq = (1 + math.log10(qtf))*idf
             for doc, tf in documents:
                 if doc not in score:
                     score[doc] = 0
                 wtd = tf*idf
-                # wtd = (1 + math.log2(tf))*idf
+                # wtd = (1 + math.log10(tf))*idf
                 score[doc] += wtd*wtq
         
         for key, value in score.items():
