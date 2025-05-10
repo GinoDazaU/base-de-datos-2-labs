@@ -49,7 +49,7 @@ def preprocess(text: str) -> list:
     tokens = nltk.word_tokenize(text) 
     filtered = [t for t in tokens if t.isalpha() and t not in stopwords_set]
     stemmed = [stemmer.stem(t) for t in filtered]
-    return stem
+    return stemmed
 
 def compute_bow(text: str) -> dict:
     tokens = preprocess(text)

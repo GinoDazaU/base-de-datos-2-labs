@@ -11,7 +11,6 @@ dbuser = os.getenv("DBUSER")
 dbpass = os.getenv("DBPASS")
 dbhost = os.getenv("DBHOST")
 
-
 def connect_db():
     conn = psycopg2.connect(
         dbname=dbname,

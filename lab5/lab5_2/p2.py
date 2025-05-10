@@ -1,3 +1,5 @@
+from load import *
+
 class InvertedIndex:
     def __init__(self):
         self.index = {}
@@ -7,6 +9,16 @@ class InvertedIndex:
     def build_from_db(self):
         # Leer desde PostgreSQL todos los bag of words
         # Construir el índice invertido, el idf y la norma (longitud) de cada documento
+
+        noticias_df = fetch_data()
+        noticias_id = noticias_df["id"].to_list()
+
+        bag_of_words = noticias_df["bag_of_words"].tolist()
+        bag_of_words = json.dumps(bag_of_words, ensure_ascii=False, indent=2)
+
+
+        print(bag_of_words)
+        print(noticias_id)
         
         """
         indice  = {
@@ -42,3 +54,6 @@ class InvertedIndex:
         result = sorted(score.items(), key= lambda tup: tup[1], reverse=True)
         # retornamos los k documentos mas relevantes (de mayor similitud a la query)
         return result[:top_k] 
+    
+inverted_index = InvertedIndex()
+inverted_index.build_from_db()
