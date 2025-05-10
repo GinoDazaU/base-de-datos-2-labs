@@ -1,4 +1,8 @@
 from load import *
+import json
+from p1 import preprocess
+import math
+from collections import Counter
 
 class InvertedIndex:
     def __init__(self):
@@ -48,12 +52,37 @@ class InvertedIndex:
         # Guiarse del algoritmo visto en clase
         # Se debe calcular el tf-idf de la query y de cada documento
         
-        # TODO
+        tokens = preprocess(query)
+
+        query_tf = Counter(tokens)
+
+        for token, qtf in query_tf.items():
+            if token not in self.index:
+                continue
+            documents = self.index[token]
+            idf = self.idf[token]
+            wtq = (1 + math.log2(qtf))*idf
+            for doc, tf in documents:
+                if doc not in score:
+                    score[doc] = 0
+                wtd = (1 + math.log2(tf))*idf
+                score[doc] += wtd*wtq
+        
+        for key, value in score.items():
+            score[key] = value/self.length(key)
         
         # Ordenar el score resultante de forma descendente
         result = sorted(score.items(), key= lambda tup: tup[1], reverse=True)
         # retornamos los k documentos mas relevantes (de mayor similitud a la query)
-        return result[:top_k] 
+        return result[:top_k]
+    
+    def showDocument(doc_id):
+        noticias = fetch_data()
+        for noticia in noticias:
+            if noticia["id"] == doc_id:
+                print(noticia["contenido"])
+                break
+
     
 inverted_index = InvertedIndex()
 inverted_index.build_from_db()

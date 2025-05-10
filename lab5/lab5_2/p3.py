@@ -11,11 +11,11 @@ def AND(list1, list2):
     while p1 < len(list1) and p2 < len(list2):
         e1 = list1[p1]
         e2 = list2[p2]
-        if e1 == e2:
+        if e1[0] == e2[0]:
             res.append(e1)
             p1 += 1
             p2 += 1
-        elif e1 > e2:
+        elif e1[0] > e2[0]:
             p2 += 1
         else:
             p1 += 1
@@ -30,10 +30,10 @@ def OR(list1, list2):
     while p1 < len(list1) and p2 < len(list2):
         e1 = list1[p1]
         e2 = list2[p2]
-        if e1 == e2:
+        if e1[0] == e2[0]:
             p1 += 1
             p2 += 1
-        elif e1 > e2:
+        elif e1[0] > e2[0]:
             res.append(e2)
             p2 += 1
         else:
@@ -55,10 +55,10 @@ def AND_NOT(list1, list2):
     while p1 < len(list1) and p2 < len(list2):
         e1 = list1[p1]
         e2 = list2[p2]
-        if e1 == e2:
+        if e1[0] == e2[0]:
             p1 += 1
             p2 += 1
-        elif e1 > e2:
+        elif e1[0] > e2[0]:
             p2 += 1
         else:
             res.append(e1)
