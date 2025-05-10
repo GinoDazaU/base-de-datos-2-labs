@@ -12,7 +12,6 @@ dbuser = os.getenv("DBUSER")
 dbpass = os.getenv("DBPASS")
 dbhost = os.getenv("DBHOST")
 
-
 def connect_db():
     conn = psycopg2.connect(
         dbname=dbname,
@@ -26,7 +25,6 @@ def fetch_data():
     conn = connect_db()
     query = "SELECT id, contenido, bag_of_words FROM noticias;"
     df = pd.read_sql(query, conn)
-    df['bag_of_words'] = df['bag_of_words'].apply(json.loads)
     conn.close()
     return df
 
