@@ -65,7 +65,8 @@ class InvertedIndex:
             for doc, tf in documents:
                 if doc not in score:
                     score[doc] = 0
-                wtd = (1 + math.log2(tf))*idf
+                wtd = tf*idf
+                # wtd = (1 + math.log2(tf))*idf
                 score[doc] += wtd*wtq
         
         for key, value in score.items():
