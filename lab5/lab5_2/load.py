@@ -3,7 +3,6 @@ import pandas as pd
 
 import os
 from dotenv import load_dotenv
-import json
 
 load_dotenv()
 
@@ -26,7 +25,6 @@ def fetch_data():
     conn = connect_db()
     query = "SELECT id, contenido, bag_of_words FROM noticias;"
     df = pd.read_sql(query, conn)
-    df['bag_of_words'] = df['bag_of_words'].apply(json.loads)
     conn.close()
     return df
 
