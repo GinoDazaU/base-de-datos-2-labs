@@ -27,6 +27,7 @@ class InvertedIndex:
         for doc_id, bow in zip(noticias_id, bag_of_words_list):
             norm = 0 # acumulador para la norma del documento
             for word, tf in bow.items(): # recorrer cada palabra y su frecuencia en el documento
+                tf = 1 + math.log(tf)
                 if word not in self.index: # si la palabra no estaen el indice, se agrega
                     self.index[word] = [] 
                 self.index[word].append((doc_id, tf)) # agregar el documento y su frecuencia al indice invertido
