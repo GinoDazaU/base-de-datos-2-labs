@@ -11,37 +11,28 @@ class InvertedIndex:
         self.length = {}
 
     def build_from_db(self):
-        # Leer desde PostgreSQL todos los bag of words
-        # Construir el índice invertido, el idf y la norma (longitud) de cada documento
-
         noticias_df = fetch_data()
         noticias_id = noticias_df["id"].to_list()
+        bag_of_words_list = noticias_df["bag_of_words"].tolist()
 
-        bag_of_words = noticias_df["bag_of_words"].tolist()
-        bag_of_words = json.dumps(bag_of_words, ensure_ascii=False, indent=2)
+        n = len(noticias_id)
+        df = {}
+        self.index = {}
+        self.length = {}
 
+        for doc_id, bow in zip(noticias_id, bag_of_words_list):
+            norm = 0
+            for word, tf in bow.items():
+                if word not in self.index:
+                    self.index[word] = []
+                self.index[word].append((doc_id, tf))
+                df[word] = df.get(word, 0) + 1
+                norm += tf ** 2
 
-        print(bag_of_words)
-        print(noticias_id)
-        
-        """
-        indice  = {
-            "word1": [("doc1", tf1), ("doc2", tf2), ("doc3", tf3)],
-            "word2": [("doc2", tf2), ("doc4", tf4)],
-            "word3": [("doc3", tf3), ("doc5", tf5)],
-        } 
-        idf  = {
-            "word1": 3,
-            "word2": 2,
-            "word3": 2,
-        } 
-        length = {
-            "doc1": 15.5236,
-            "doc2": 10.5236,
-            "doc3": 5.5236,
-        }
-        """
-        pass
+            self.length[doc_id] = math.sqrt(norm)
+
+        for word, doc_freq in df.items():
+            self.idf[word] = math.log(n / doc_freq)
     
     def L(self, word):
         return self.index.get(word, [])
