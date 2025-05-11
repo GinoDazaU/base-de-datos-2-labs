@@ -51,9 +51,6 @@ class InvertedIndex:
   
     def cosine_search(self, query, top_k=5):  
         score = {}
-        # No es necesario usar vectores numericos del tamaño del vocabulario
-        # Guiarse del algoritmo visto en clase
-        # Se debe calcular el tf-idf de la query y de cada documento
         
         tokens = preprocess(query)
 
@@ -69,7 +66,6 @@ class InvertedIndex:
                 if doc not in score:
                     score[doc] = 0
                 wtd = tf*idf
-                # wtd = (1 + math.log10(tf))*idf
                 score[doc] += wtd*wtq
         
         for key, value in score.items():
@@ -81,7 +77,7 @@ class InvertedIndex:
         return result[:top_k]
     
     def showDocument(self, doc_id):
-        noticia = fetch_query(f"SELECT contenido FROM noticias WHERE id = {doc_id}")
+        noticia = fetch_query(f"SELECT id, contenido FROM noticias WHERE id = {doc_id}")
         return noticia
 
     def showDocuments(self, doc_ids):
