@@ -31,6 +31,7 @@ def OR(list1, list2):
         e1 = list1[p1]
         e2 = list2[p2]
         if e1[0] == e2[0]:
+            res.append(e1)
             p1 += 1
             p2 += 1
         elif e1[0] > e2[0]:
@@ -42,9 +43,11 @@ def OR(list1, list2):
     while p1 < len(list1):
         e1 = list1[p1]
         res.append(e1)
+        p1 += 1
     while p2 < len(list2):
         e2 = list2[p2]
         res.append(e2)
+        p2 += 2
     return res
 
 def AND_NOT(list1, list2):
@@ -66,15 +69,20 @@ def AND_NOT(list1, list2):
     while p1 < len(list1):
         e1 = list1[p1]
         res.append(e1)
+        p1 += 1
+    return res
 
 # Prueba 1
 result = AND(idx.L("sostenibilidad"), AND(idx.L("ambiente"), idx.L("renovables")))
-print("sostenibilidad AND ambiente AND renovable: ", idx.showDocuments(result))
+print("sostenibilidad AND ambiente AND renovable:")
+print(idx.showDocuments(result))
 
 # Prueba 2
 result = AND(idx.L("tecnología"), OR(idx.L("banca"), idx.L("finanzas")))
-print("tecnología AND (banca OR finanzas): ", idx.showDocuments(result))
+print("tecnología AND (banca OR finanzas):")
+print(idx.showDocuments(result))
 
 # Prueba 3
 result = AND_NOT(idx.L("economía"), idx.L("inflación"))
-print("economía AND-NOT inflación: " , idx.showDocuments(result))
+print("economía AND-NOT inflación:")
+print(idx.showDocuments(result))

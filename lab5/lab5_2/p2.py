@@ -1,8 +1,14 @@
 from load import *
 import json
-from p1 import preprocess
+from p1 import preprocess, stemmer
 import math
 from collections import Counter
+
+def fetch_query(query):
+    conn = connect_db()
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
 
 class InvertedIndex:
     def __init__(self):
@@ -35,6 +41,7 @@ class InvertedIndex:
             self.idf[word] = math.log10(n / doc_freq)
     
     def L(self, word):
+        word = stemmer.stem(word)
         return self.index.get(word, [])
   
     def cosine_search(self, query, top_k=5):  
@@ -68,13 +75,16 @@ class InvertedIndex:
         # retornamos los k documentos mas relevantes (de mayor similitud a la query)
         return result[:top_k]
     
-    def showDocument(doc_id):
-        noticias = fetch_data()
-        for noticia in noticias:
-            if noticia["id"] == doc_id:
-                print(noticia["contenido"])
-                break
+    def showDocument(self, doc_id):
+        noticia = fetch_query(f"SELECT contenido FROM noticias WHERE id = {doc_id}")
+        return noticia
 
+    def showDocuments(self, doc_ids):
+        if not doc_ids:
+            return ""
+        condition = " OR ".join([f"id = {id[0]}" for id in doc_ids])
+        noticias = fetch_query(f"SELECT id, contenido FROM noticias WHERE {condition}")
+        return noticias
     
 inverted_index = InvertedIndex()
 inverted_index.build_from_db()
