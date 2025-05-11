@@ -73,7 +73,7 @@ class InvertedIndex:
                 score[doc] += wtd*wtq
         
         for key, value in score.items():
-            score[key] = value/self.length(key)
+            score[key] = value/self.length[key]
         
         # Ordenar el score resultante de forma descendente
         result = sorted(score.items(), key= lambda tup: tup[1], reverse=True)

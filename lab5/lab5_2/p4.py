@@ -1,4 +1,7 @@
-from p3 import idx
+from p2 import InvertedIndex
+
+idx = InvertedIndex()
+idx.build_from_db()
 
 test_queries = [
     {
@@ -17,6 +20,8 @@ test_queries = [
 
 for test in test_queries:    
     results = idx.cosine_search(test['query'], test['top_k'])
+    print(f"Consulta: {test['query']}")
     print(f"Top {test['top_k']} documentos más similares:") 
     for doc_id, score in results:
-        print(f"Doc {doc_id}: {score:.3f}: ", idx.showDocument(doc_id))
+        print(f"Doc {doc_id}, Score: {score:.3f}:")
+        print(idx.showDocument(doc_id))
