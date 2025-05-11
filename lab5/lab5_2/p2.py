@@ -17,28 +17,33 @@ class InvertedIndex:
         self.length = {}
 
     def build_from_db(self):
+        # leer los datos desde la base de datos
         noticias_df = fetch_data()
         noticias_id = noticias_df["id"].to_list()
         bag_of_words_list = noticias_df["bag_of_words"].tolist()
 
-        n = len(noticias_id)
-        df = {}
+        n = len(noticias_id) # total de documentos
+        
+        df = {} # cantidad de documentos donde aparece cada palabr
+        # inicializar los diccionarios del indice invertido y de las normas (vacios)
         self.index = {}
         self.length = {}
 
+        # recorrer cada documento con su bag of words
         for doc_id, bow in zip(noticias_id, bag_of_words_list):
-            norm = 0
-            for word, tf in bow.items():
-                if word not in self.index:
-                    self.index[word] = []
-                self.index[word].append((doc_id, tf))
-                df[word] = df.get(word, 0) + 1
-                norm += tf ** 2
+            norm = 0 # acumulador para la norma del documento
+            for word, tf in bow.items(): # recorrer cada palabra y su frecuencia en el documento
+                tf = 1 + math.log(tf)
+                if word not in self.index: # si la palabra no estaen el indice, se agrega
+                    self.index[word] = [] 
+                self.index[word].append((doc_id, tf)) # agregar el documento y su frecuencia al indice invertido
+                df[word] = df.get(word, 0) + 1 #contar que esta palabra aparece en este documento
+                norm += tf ** 2 # acumular el cuadrado del tf para calcular la norma
 
-            self.length[doc_id] = math.sqrt(norm)
+            self.length[doc_id] = math.sqrt(norm) # guardar la norma del documento
 
-        for word, doc_freq in df.items():
-            self.idf[word] = math.log10(n / doc_freq)
+        for word, doc_freq in df.items(): # calcular el idf para cada palabra
+            self.idf[word] = math.log10(n / doc_freq) #idf
     
     def L(self, word):
         word = stemmer.stem(word)
