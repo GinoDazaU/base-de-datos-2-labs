@@ -35,11 +35,12 @@ q1 = np.percentile(distancias, 1)
 q5 = np.percentile(distancias, 5)
 q10 = np.percentile(distancias, 10)
 q25 = np.percentile(distancias, 25)
+q50 = np.percentile(distancias, 50)
 
-print(f"q1: {q1}, q5: {q5}, q10: {q10}, q25: {q25}")
+print(f"q1: {q1}, q5: {q5}, q10: {q10}, q25: {q25}, q50: {q50}")
 
 # El percentil qn deberia devolver aproximadamente un n% de los datos
-# Resultado: q1 = 0.12, q2 = 0.21, q3 = 0.27, q4 = 0.42
+# Resultado: q1 = 0.12, q5 = 0.21, q10 = 0.27, q25 = 0.42, q50 = 0.66
 
 def rangeSearch(data, query, radio):
     result = []
@@ -49,7 +50,7 @@ def rangeSearch(data, query, radio):
     return result
 
 # Radios seleccionados
-radios = [0.12, 0.21, 0.27, 0.42]
+radios = [0.12, 0.21, 0.27, 0.42, 0.66]
 queries_idx = [15, 2084, 3560]
 
 for qidx in queries_idx:
@@ -69,12 +70,18 @@ def knnSearch(data, query, k):
     for i in range(len(data)):
         dist = ED(data.iloc[i], query)
         result.append((i, dist))
-    result = heapq.nsmallest(k, result, key=lambda x: x[1])
+    result = [i[0] for i in heapq.nsmallest(k, result, key=lambda x: x[1])]
     return result
 
 Ks = [2, 4, 8, 16, 32]
 
 for k in Ks:
     for qidx in queries_idx:
-        print(f"Query({qidx}), k = {k}: ", end='')
-        print(f"{[i[0] for i in knnSearch(dataFeatures, dataFeatures.iloc[qidx], k)]}")
+        target = data.iloc[qidx, -1]
+        result = knnSearch(dataFeatures, dataFeatures.iloc[qidx], k)
+        PR = 0
+        for i in result:
+            if data.iloc[i, -1] == target:
+                PR += 1
+        PR = PR / len(result)
+        print(f"Query({qidx}), k = {k}. PR = {PR}")
