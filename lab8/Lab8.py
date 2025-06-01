@@ -20,9 +20,8 @@ def connect_db():
     conn = psycopg2.connect(
         dbname=dbname,
         user=dbuser,
-        password=123,
-        host=dbhost,
-        port=5433
+        password=dbpass,
+        host=dbhost
     )
     return conn
 
