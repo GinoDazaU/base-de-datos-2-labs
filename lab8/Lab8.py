@@ -4,6 +4,7 @@ import os
 import math
 import face_recognition
 import psycopg2
+import time
 from psycopg2.extras import execute_values
 
 from dotenv import load_dotenv
@@ -19,8 +20,9 @@ def connect_db():
     conn = psycopg2.connect(
         dbname=dbname,
         user=dbuser,
-        password=dbpass,
-        host=dbhost
+        password=123,
+        host=dbhost,
+        port=5433
     )
     return conn
 
@@ -38,7 +40,7 @@ def distance_to_center(location : list[tuple], center_x : int, center_y : int) -
         dy = 0
     elif center_y < top:
         dy = top - center_y
-    else:  # py > bottom
+    else:
         dy = center_y - bottom
     
     return math.sqrt(dx*dx + dy*dy)
@@ -46,13 +48,21 @@ def distance_to_center(location : list[tuple], center_x : int, center_y : int) -
 def generate_face_embeddings(dir, N = -1):
     num = 0
     res = []
-    print(f"{num} out of {f"? images" if N == -1 else f"{N} images ({round(num/N*100, 2)}%)"}")
+
+    if N == -1:
+        N = 0
+        for root, dirs, files in os.walk(dir):
+            for file in files:
+                if file.lower().endswith('.jpg'):
+                    N += 1
+
+    print(f"{num} out of {N} images ({round(num/N*100, 2)}%)")
     for root, dirs, files in os.walk(dir):
-        if N != -1 and num >= N:
+        if num >= N:
             break
         for file in files:
             if file.lower().endswith('.jpg'):
-                if N != -1 and num >= N:
+                if num >= N:
                     break
                 
                 image_path = os.path.join(root, file)
@@ -70,12 +80,12 @@ def generate_face_embeddings(dir, N = -1):
                             min_dist = dist
                             face_location = i
                 face_encoding = face_recognition.face_encodings(image, [face_location])[0]
-                res.append((file, face_encoding.tolist()))
+                res.append((file, f"({str(face_encoding.tolist())[1:-1]})"))
 
                 num += 1
 
                 if(num % 100 == 0):
-                    print(f"{num} out of {f"? images" if N == -1 else f"{N} images ({round(num/N*100, 2)}%)"}")
+                    print(f"{num} out of {N} images ({round(num/N*100, 2)}%)")
     
     conn = connect_db()
     cur = conn.cursor()
@@ -85,4 +95,41 @@ def generate_face_embeddings(dir, N = -1):
     cur.close()
     conn.close()
 
-generate_face_embeddings('lfw_funneled', 200)
+# Para poblar la base de datos (solo correr una vez)
+# generate_face_embeddings('lfw_funneled')
+
+def knn(image_path, k):
+    image = face_recognition.load_image_file(image_path)
+    faces_locations = face_recognition.face_locations(image)
+    if len(faces_locations) == 0:
+        return
+    if len(faces_locations) == 1:
+        face_location = faces_locations[0]                    
+    if len(faces_locations) > 1:
+        min_dist = -1
+        for i in faces_locations:
+            dist = distance_to_center(i, image.shape[0] // 2, image.shape[1] // 2)
+            if min_dist == -1 or dist < min_dist:
+                min_dist = dist
+                face_location = i
+    face_encoding = face_recognition.face_encodings(image, [face_location])[0]
+    
+    conn = connect_db()
+    cur = conn.cursor()
+
+    start = time.time()
+    query = "SELECT filename, cube_distance(encoding, %s) as D FROM face_encodings ORDER BY encoding <-> %s LIMIT %s"
+    vector = f"({str(face_encoding.tolist())[1:-1]})"
+    cur.execute(query, (vector, vector, k))
+    data = cur.fetchall()
+    end = time.time()
+
+    print(f"Execution time: {round(end - start, 4)} seconds")
+
+    cur.close()
+    conn.close()
+
+    return data    
+
+# Para hacer la busqueda knn
+# print(knn('test_images/test1.jpg', 5))
