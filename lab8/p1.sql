@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS cube;
 CREATE TABLE vectors2 (id serial, vector_lineal cube, vector_gist cube);
 INSERT INTO vectors2(id, vector_lineal)
 SELECT id, cube(ARRAY[random()*1000, random()*1000])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors2 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors2 ON vectors2 USING gist(vector_gist);
 
@@ -28,7 +28,7 @@ SELECT id, cube(ARRAY[
   random()*1000, random()*1000, random()*1000,
   random()*1000, random()*1000, random()*1000
 ])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors6 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors6 ON vectors6 USING gist(vector_gist);
 
@@ -39,7 +39,7 @@ SELECT id, cube(ARRAY[
   random()*1000, random()*1000, random()*1000, random()*1000,
   random()*1000, random()*1000, random()*1000, random()*1000
 ])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors8 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors8 ON vectors8 USING gist(vector_gist);
 
@@ -52,7 +52,7 @@ SELECT id, cube(ARRAY[
   random()*1000, random()*1000, random()*1000, random()*1000,
   random()*1000, random()*1000, random()*1000, random()*1000
 ])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors16 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors16 ON vectors16 USING gist(vector_gist);
 
@@ -69,7 +69,7 @@ SELECT id, cube(ARRAY[
   random()*1000, random()*1000, random()*1000, random()*1000,
   random()*1000, random()*1000, random()*1000, random()*1000
 ])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors32 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors32 ON vectors32 USING gist(vector_gist);
 
@@ -94,7 +94,7 @@ SELECT id, cube(ARRAY[
   random()*1000, random()*1000, random()*1000, random()*1000,
   random()*1000, random()*1000, random()*1000, random()*1000
 ])
-FROM generate_series(1, 1000000) id;
+FROM generate_series(1, 100000) id;
 UPDATE vectors64 SET vector_gist = vector_lineal;
 CREATE INDEX idx_vectors64 ON vectors64 USING gist(vector_gist);
 
