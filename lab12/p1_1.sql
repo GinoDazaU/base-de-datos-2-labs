@@ -1,3 +1,4 @@
+-- Procedimiento para crear un nuevo fragmento al insertar un paciente con un nuevo diagnostico
 CREATE OR REPLACE PROCEDURE insertar_paciente(
   p_dni CHAR(8),
   p_nombre VARCHAR,
@@ -44,3 +45,17 @@ BEGIN
   );
 END;
 $$;
+
+
+-- Nuevos pacientes con nuevos diagnosticos
+CALL insertar_paciente('11112222', 'Diego Torres', 'Arequipa', 'Covid-19', 68.5, 40, 'M');
+CALL insertar_paciente('11112223', 'Diego Lopez', 'Arequipa', 'Covid-19', 68.5, 40, 'M');
+CALL insertar_paciente('22223333', 'Elena Ríos', 'Piura', 'Asma', 54.2, 32, 'F');
+CALL insertar_paciente('33334444', 'Luis Salas', 'Iquitos', 'Cáncer', 72.0, 58, 'M');
+CALL insertar_paciente('44445555', 'Marta Díaz', 'Cusco', 'Anemia', 48.5, 29, 'F');
+
+
+-- Muesta las particiones
+SELECT tablename
+FROM pg_tables
+WHERE tablename LIKE 'paciente_%';
