@@ -34,11 +34,33 @@ INSERT INTO Paciente VALUES
 
 
 -- nueva info
-CREATE TABLE Paciente_Asma PARTITION OF Paciente
-  FOR VALUES IN ('Asma');
+
 INSERT INTO Paciente VALUES
-('78451236', 'Diana López Rivera', 'Cusco', 'Asma', 60, 30, 'F');
-CREATE TABLE Paciente_Covid PARTITION OF Paciente FOR VALUES IN ('Covid-19');
-INSERT INTO Paciente VALUES
-('78562314', 'Juan Pérez Valdez', 'Cusco', 'Covid-19', 68, 52, 'M'),
-('89562374', 'Lucía Gutiérrez Solís', 'Trujillo', 'Covid-19', 70, 43, 'F');
+-- Diabetes
+('13245768', 'Natalia Estefanía León Castañeda', 'Chiclayo', 'Diabetes', 67.9, 46, 'F'),
+('24356879', 'Diego Martín Salinas Bravo', 'Cusco', 'Diabetes', 72.4, 51, 'M'),
+('35467980', 'Andrea Lucero Velásquez Poma', 'Tacna', 'Diabetes', 66.2, 39, 'F'),
+('12345678', 'Lucía Fernanda Paredes Sánchez', 'Arequipa', 'Diabetes', 68.5, 52, 'F'),
+('23456789', 'Carlos Enrique Rojas Peña', 'Trujillo', 'Diabetes', 74.2, 49, 'M'),
+('34567890', 'Julieta Noemí Gutiérrez Valle', 'Cusco', 'Diabetes', 69.7, 58, 'F'),
+-- Obesidad
+('46578091', 'Javier Alonso Cabrera Núñez', 'Iquitos', 'Obesidad', 110.5, 42, 'M'),
+('57689102', 'Melissa Karina Reyes Portugal', 'Huánuco', 'Obesidad', 92.8, 36, 'F'),
+('68790213', 'Juan Pablo Córdova Fernández', 'Pucallpa', 'Obesidad', 105.7, 48, 'M'),
+('45678901', 'Eduardo Daniel Palacios León', 'Piura', 'Obesidad', 102.3, 44, 'M'),
+('56789012', 'Camila Antonia Herrera Soto', 'Lima', 'Obesidad', 88.6, 31, 'F'),
+('67890123', 'Sofía Milagros Cárdenas Mejía', 'Huancayo', 'Obesidad', 91.0, 37, 'F'),
+-- Cardiopatía
+('79801324', 'Valeria Antonella Mejía Lozano', 'Trujillo', 'Cardiopatía', 74.6, 53, 'F'),
+('80912435', 'Óscar Rafael Guzmán Torres', 'Lima', 'Cardiopatía', 79.3, 60, 'M'),
+('91023546', 'Ruth Jimena Palomino Díaz', 'Arequipa', 'Cardiopatía', 73.9, 47, 'F'),
+('78901234', 'José Armando Zúñiga Pérez', 'Cusco', 'Cardiopatía', 76.5, 61, 'M'),
+('89012345', 'Martina Alejandra Ruiz Ríos', 'Lima', 'Cardiopatía', 70.8, 54, 'F'),
+('90123456', 'Ricardo Esteban Torres Salas', 'Arequipa', 'Cardiopatía', 80.1, 59, 'M'),
+-- Hipertensión
+('92134657', 'Tomás Nicolás Rivas Paredes', 'Chimbote', 'Hipertensión', 88.0, 59, 'M'),
+('83245768', 'Flor Mariela Gamarra Silva', 'Cusco', 'Hipertensión', 74.5, 56, 'F'),
+('74356879', 'Enrique Alejandro Dueñas Campos', 'Ica', 'Hipertensión', 82.1, 62, 'M');
+('91234567', 'Daniela Ruth Flores Chávez', 'Trujillo', 'Hipertensión', 73.0, 50, 'F'),
+('82345678', 'Gabriel Joaquín Medina Ortiz', 'Piura', 'Hipertensión', 86.4, 63, 'M'),
+('73456789', 'Patricia Elena Ramos Guevara', 'Lima', 'Hipertensión', 78.3, 57, 'F');
