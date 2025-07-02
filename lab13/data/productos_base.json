@@ -1,0 +1,205 @@
+[
+    {
+        "id_producto": 1,
+        "nombre": "Laptop HP Envy",
+        "marca": "HP",
+        "precio": 1200,
+        "descuento": 10,
+        "categoria": "Electrónica",
+        "subcategoria": "Laptops",
+        "stock": 30,
+        "dimensiones": {
+            "ancho": 35.8,
+            "alto": 24.6,
+            "profundidad": 1.8,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 1.92,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Procesador Intel Core i7",
+            "16GB de RAM",
+            "512GB SSD",
+            "Pantalla táctil de 15 pulgadas"
+        ],
+        "calificacion": 4.5,
+        "descripcion": "Laptop HP Envy de 15 pulgadas con procesador Intel Core i7, 16GB de RAM, y disco SSD de 512GB. Ideal para trabajos intensivos de oficina o edición multimedia.",
+        "fecha_lanzamiento": "2023-08-01"
+    },
+    {
+        "id_producto": 2,
+        "nombre": "Teléfono Samsung Galaxy S21",
+        "marca": "Samsung",
+        "precio": 950,
+        "descuento": 5,
+        "categoria": "Electrónica",
+        "subcategoria": "Teléfonos móviles",
+        "stock": 50,
+        "dimensiones": {
+            "ancho": 7.1,
+            "alto": 15.1,
+            "profundidad": 0.8,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 0.169,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Cámara de 64MP",
+            "Pantalla AMOLED de 6.2 pulgadas",
+            "128GB de almacenamiento",
+            "5G"
+        ],
+        "calificacion": 4.8,
+        "descripcion": "Teléfono inteligente Samsung Galaxy S21 con cámara de 64MP, conectividad 5G, y pantalla AMOLED de 6.2 pulgadas. Perfecto para capturar fotos de alta calidad y navegar a altas velocidades.",
+        "fecha_lanzamiento": "2024-01-15"
+    },
+    {
+        "id_producto": 3,
+        "nombre": "Cafetera Nespresso",
+        "marca": "Nespresso",
+        "precio": 180,
+        "descuento": 0,
+        "categoria": "Hogar",
+        "subcategoria": "Cocina",
+        "stock": 75,
+        "dimensiones": {
+            "ancho": 12.0,
+            "alto": 23.5,
+            "profundidad": 32.0,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 2.3,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Compatible con cápsulas Nespresso",
+            "Función de apagado automático",
+            "Depósito de agua de 1L",
+            "Diferentes niveles de intensidad"
+        ],
+        "calificacion": 4.3,
+        "descripcion": "Cafetera Nespresso ideal para preparar café con cápsulas en casa, con diferentes opciones de intensidad y apagado automático.",
+        "fecha_lanzamiento": "2022-05-10"
+    },
+    {
+        "id_producto": 4,
+        "nombre": "Silla ergonómica de oficina",
+        "marca": "ErgoTech",
+        "precio": 350,
+        "descuento": 15,
+        "categoria": "Muebles",
+        "subcategoria": "Oficina",
+        "stock": 25,
+        "dimensiones": {
+            "ancho": 60.0,
+            "alto": 110.0,
+            "profundidad": 60.0,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 14.5,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Soporte lumbar ajustable",
+            "Reposacabezas",
+            "Brazos ajustables",
+            "Tela transpirable"
+        ],
+        "calificacion": 4.7,
+        "descripcion": "Silla ergonómica con soporte lumbar ajustable, diseñada para ofrecer comodidad durante largas jornadas de trabajo en la oficina o el hogar.",
+        "fecha_lanzamiento": "2023-02-20"
+    },
+    {
+        "id_producto": 5,
+        "nombre": "Televisor LG 55 pulgadas 4K",
+        "marca": "LG",
+        "precio": 750,
+        "descuento": 10,
+        "categoria": "Electrónica",
+        "subcategoria": "Televisores",
+        "stock": 40,
+        "dimensiones": {
+            "ancho": 123.0,
+            "alto": 71.5,
+            "profundidad": 5.8,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 17.0,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Resolución 4K UHD",
+            "Soporte para HDR10",
+            "Smart TV con AI ThinQ",
+            "Compatibilidad con Google Assistant y Alexa"
+        ],
+        "calificacion": 4.6,
+        "descripcion": "Televisor LG de 55 pulgadas con resolución 4K UHD y soporte para HDR10. Incluye funciones de Smart TV con IA ThinQ para una experiencia más inteligente.",
+        "fecha_lanzamiento": "2023-06-12"
+    },
+    {
+        "id_producto": 6,
+        "nombre": "Auriculares Sony WH-1000XM4",
+        "marca": "Sony",
+        "precio": 350,
+        "descuento": 5,
+        "categoria": "Electrónica",
+        "subcategoria": "Audio",
+        "stock": 60,
+        "dimensiones": {
+            "ancho": 7.8,
+            "alto": 20.0,
+            "profundidad": 18.0,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 0.254,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Cancelación de ruido activa",
+            "Hasta 30 horas de batería",
+            "Asistente de voz integrado",
+            "Conectividad Bluetooth 5.0"
+        ],
+        "calificacion": 4.9,
+        "descripcion": "Auriculares inalámbricos Sony WH-1000XM4 con cancelación activa de ruido, excelente calidad de sonido, y asistentes de voz integrados para una experiencia auditiva premium.",
+        "fecha_lanzamiento": "2024-03-05"
+    },
+    {
+        "id_producto": 7,
+        "nombre": "Apple iPad Pro 11",
+        "marca": "Apple",
+        "precio": 999,
+        "descuento": 8,
+        "categoria": "Electrónica",
+        "subcategoria": "Tablets",
+        "stock": 20,
+        "dimensiones": {
+            "ancho": 17.85,
+            "alto": 24.76,
+            "profundidad": 0.59,
+            "unidad": "cm"
+        },
+        "peso": {
+            "valor": 0.471,
+            "unidad": "kg"
+        },
+        "caracteristicas": [
+            "Pantalla Liquid Retina de 11 pulgadas",
+            "Chip M1 de Apple",
+            "Compatibilidad con Apple Pencil y Magic Keyboard",
+            "5G"
+        ],
+        "calificacion": 4.9,
+        "descripcion": "Apple iPad Pro de 11 pulgadas con el potente chip M1, ideal para profesionales creativos y tareas de alto rendimiento. Compatible con Apple Pencil y Magic Keyboard.",
+        "fecha_lanzamiento": "2024-07-01"
+    }
+]

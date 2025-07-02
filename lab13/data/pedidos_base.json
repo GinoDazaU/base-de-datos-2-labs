@@ -1,0 +1,74 @@
+[
+    {
+        "id_pedido": 101,
+        "id_cliente": 1,
+        "productos": [
+            {
+                "id_producto": 1,
+                "nombre": "Laptop HP Envy",
+                "cantidad": 1,
+                "precio_unitario": 1200
+            },
+            {
+                "id_producto": 3,
+                "nombre": "Cafetera Nespresso",
+                "cantidad": 2,
+                "precio_unitario": 180
+            }
+        ],
+        "total_pedido": 1560,
+        "fecha_pedido": "2024-09-15",
+        "estado": "Enviado"
+    },
+    {
+        "id_pedido": 102,
+        "id_cliente": 2,
+        "productos": [
+            {
+                "id_producto": 2,
+                "nombre": "Teléfono Samsung Galaxy S21",
+                "cantidad": 1,
+                "precio_unitario": 950
+            }
+        ],
+        "total_pedido": 950,
+        "fecha_pedido": "2024-09-16",
+        "estado": "Procesando"
+    },
+    {
+        "id_pedido": 103,
+        "id_cliente": 3,
+        "productos": [
+            {
+                "id_producto": 4,
+                "nombre": "Silla ergonómica de oficina",
+                "cantidad": 1,
+                "precio_unitario": 350
+            },
+            {
+                "id_producto": 5,
+                "nombre": "Televisor LG 55 pulgadas 4K",
+                "cantidad": 1,
+                "precio_unitario": 750
+            }
+        ],
+        "total_pedido": 1100,
+        "fecha_pedido": "2024-09-17",
+        "estado": "Entregado"
+    },
+    {
+        "id_pedido": 104,
+        "id_cliente": 4,
+        "productos": [
+            {
+                "id_producto": 5,
+                "nombre": "Televisor LG 55 pulgadas 4K",
+                "cantidad": 1,
+                "precio_unitario": 750
+            }
+        ],
+        "total_pedido": 750,
+        "fecha_pedido": "2024-09-18",
+        "estado": "Cancelado"
+    }
+]

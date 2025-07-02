@@ -1,0 +1,2084 @@
+[
+    {
+        "id_pedido": 100,
+        "id_cliente": 71,
+        "productos": [
+            {
+                "id_producto": 33,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 33",
+                "cantidad": 3,
+                "precio_unitario": 1039.79
+            }
+        ],
+        "fecha_pedido": "2024-06-06",
+        "estado": "Entregado",
+        "total_pedido": 3119.37
+    },
+    {
+        "id_pedido": 101,
+        "id_cliente": 47,
+        "productos": [
+            {
+                "id_producto": 100,
+                "nombre": "Cafetera Nespresso Modelo 100",
+                "cantidad": 1,
+                "precio_unitario": 176.79
+            }
+        ],
+        "fecha_pedido": "2024-06-18",
+        "estado": "Cancelado",
+        "total_pedido": 176.79
+    },
+    {
+        "id_pedido": 102,
+        "id_cliente": 77,
+        "productos": [
+            {
+                "id_producto": 49,
+                "nombre": "Cafetera Nespresso Modelo 49",
+                "cantidad": 2,
+                "precio_unitario": 188.68
+            },
+            {
+                "id_producto": 60,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 60",
+                "cantidad": 2,
+                "precio_unitario": 354.3
+            },
+            {
+                "id_producto": 98,
+                "nombre": "Cafetera Nespresso Modelo 98",
+                "cantidad": 3,
+                "precio_unitario": 153.9
+            }
+        ],
+        "fecha_pedido": "2024-05-18",
+        "estado": "Procesando",
+        "total_pedido": 1547.66
+    },
+    {
+        "id_pedido": 103,
+        "id_cliente": 47,
+        "productos": [
+            {
+                "id_producto": 68,
+                "nombre": "Apple iPad Pro 11 Modelo 68",
+                "cantidad": 1,
+                "precio_unitario": 997.2
+            }
+        ],
+        "fecha_pedido": "2024-06-24",
+        "estado": "Entregado",
+        "total_pedido": 997.2
+    },
+    {
+        "id_pedido": 104,
+        "id_cliente": 15,
+        "productos": [
+            {
+                "id_producto": 28,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 28",
+                "cantidad": 2,
+                "precio_unitario": 824.9
+            },
+            {
+                "id_producto": 43,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 43",
+                "cantidad": 1,
+                "precio_unitario": 379.21
+            }
+        ],
+        "fecha_pedido": "2024-06-27",
+        "estado": "Procesando",
+        "total_pedido": 2029.01
+    },
+    {
+        "id_pedido": 105,
+        "id_cliente": 53,
+        "productos": [
+            {
+                "id_producto": 72,
+                "nombre": "Apple iPad Pro 11 Modelo 72",
+                "cantidad": 3,
+                "precio_unitario": 863.99
+            },
+            {
+                "id_producto": 80,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 80",
+                "cantidad": 1,
+                "precio_unitario": 852.23
+            },
+            {
+                "id_producto": 29,
+                "nombre": "Apple iPad Pro 11 Modelo 29",
+                "cantidad": 1,
+                "precio_unitario": 1129.98
+            }
+        ],
+        "fecha_pedido": "2024-06-04",
+        "estado": "Procesando",
+        "total_pedido": 4574.18
+    },
+    {
+        "id_pedido": 106,
+        "id_cliente": 88,
+        "productos": [
+            {
+                "id_producto": 97,
+                "nombre": "Cafetera Nespresso Modelo 97",
+                "cantidad": 3,
+                "precio_unitario": 173.86
+            },
+            {
+                "id_producto": 1,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 1",
+                "cantidad": 3,
+                "precio_unitario": 415.22
+            },
+            {
+                "id_producto": 12,
+                "nombre": "Cafetera Nespresso Modelo 12",
+                "cantidad": 2,
+                "precio_unitario": 211.43
+            }
+        ],
+        "fecha_pedido": "2024-01-03",
+        "estado": "Entregado",
+        "total_pedido": 2190.1
+    },
+    {
+        "id_pedido": 107,
+        "id_cliente": 93,
+        "productos": [
+            {
+                "id_producto": 61,
+                "nombre": "Silla ergonómica de oficina Modelo 61",
+                "cantidad": 2,
+                "precio_unitario": 310.53
+            },
+            {
+                "id_producto": 88,
+                "nombre": "Apple iPad Pro 11 Modelo 88",
+                "cantidad": 3,
+                "precio_unitario": 995.96
+            }
+        ],
+        "fecha_pedido": "2024-03-17",
+        "estado": "Procesando",
+        "total_pedido": 3608.94
+    },
+    {
+        "id_pedido": 108,
+        "id_cliente": 33,
+        "productos": [
+            {
+                "id_producto": 15,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 15",
+                "cantidad": 3,
+                "precio_unitario": 608.02
+            }
+        ],
+        "fecha_pedido": "2024-04-03",
+        "estado": "Enviado",
+        "total_pedido": 1824.06
+    },
+    {
+        "id_pedido": 109,
+        "id_cliente": 95,
+        "productos": [
+            {
+                "id_producto": 33,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 33",
+                "cantidad": 1,
+                "precio_unitario": 1039.79
+            },
+            {
+                "id_producto": 83,
+                "nombre": "Cafetera Nespresso Modelo 83",
+                "cantidad": 3,
+                "precio_unitario": 158.0
+            }
+        ],
+        "fecha_pedido": "2024-05-14",
+        "estado": "Entregado",
+        "total_pedido": 1513.79
+    },
+    {
+        "id_pedido": 110,
+        "id_cliente": 48,
+        "productos": [
+            {
+                "id_producto": 96,
+                "nombre": "Laptop HP Envy Modelo 96",
+                "cantidad": 2,
+                "precio_unitario": 1260.67
+            },
+            {
+                "id_producto": 97,
+                "nombre": "Cafetera Nespresso Modelo 97",
+                "cantidad": 3,
+                "precio_unitario": 173.86
+            },
+            {
+                "id_producto": 80,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 80",
+                "cantidad": 1,
+                "precio_unitario": 852.23
+            }
+        ],
+        "fecha_pedido": "2024-05-11",
+        "estado": "Cancelado",
+        "total_pedido": 3895.15
+    },
+    {
+        "id_pedido": 111,
+        "id_cliente": 9,
+        "productos": [
+            {
+                "id_producto": 97,
+                "nombre": "Cafetera Nespresso Modelo 97",
+                "cantidad": 1,
+                "precio_unitario": 173.86
+            },
+            {
+                "id_producto": 58,
+                "nombre": "Cafetera Nespresso Modelo 58",
+                "cantidad": 2,
+                "precio_unitario": 196.6
+            }
+        ],
+        "fecha_pedido": "2024-02-26",
+        "estado": "Cancelado",
+        "total_pedido": 567.06
+    },
+    {
+        "id_pedido": 112,
+        "id_cliente": 76,
+        "productos": [
+            {
+                "id_producto": 92,
+                "nombre": "Apple iPad Pro 11 Modelo 92",
+                "cantidad": 1,
+                "precio_unitario": 1128.22
+            },
+            {
+                "id_producto": 8,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 8",
+                "cantidad": 1,
+                "precio_unitario": 1082.51
+            },
+            {
+                "id_producto": 76,
+                "nombre": "Apple iPad Pro 11 Modelo 76",
+                "cantidad": 3,
+                "precio_unitario": 968.46
+            }
+        ],
+        "fecha_pedido": "2024-06-16",
+        "estado": "Cancelado",
+        "total_pedido": 5116.11
+    },
+    {
+        "id_pedido": 113,
+        "id_cliente": 73,
+        "productos": [
+            {
+                "id_producto": 29,
+                "nombre": "Apple iPad Pro 11 Modelo 29",
+                "cantidad": 2,
+                "precio_unitario": 1129.98
+            },
+            {
+                "id_producto": 39,
+                "nombre": "Cafetera Nespresso Modelo 39",
+                "cantidad": 3,
+                "precio_unitario": 213.26
+            }
+        ],
+        "fecha_pedido": "2024-04-22",
+        "estado": "Enviado",
+        "total_pedido": 2899.74
+    },
+    {
+        "id_pedido": 114,
+        "id_cliente": 16,
+        "productos": [
+            {
+                "id_producto": 54,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 54",
+                "cantidad": 3,
+                "precio_unitario": 297.16
+            },
+            {
+                "id_producto": 47,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 47",
+                "cantidad": 1,
+                "precio_unitario": 712.1
+            },
+            {
+                "id_producto": 82,
+                "nombre": "Silla ergonómica de oficina Modelo 82",
+                "cantidad": 1,
+                "precio_unitario": 390.85
+            }
+        ],
+        "fecha_pedido": "2024-04-20",
+        "estado": "Entregado",
+        "total_pedido": 1994.43
+    },
+    {
+        "id_pedido": 115,
+        "id_cliente": 14,
+        "productos": [
+            {
+                "id_producto": 22,
+                "nombre": "Apple iPad Pro 11 Modelo 22",
+                "cantidad": 1,
+                "precio_unitario": 1044.43
+            },
+            {
+                "id_producto": 95,
+                "nombre": "Silla ergonómica de oficina Modelo 95",
+                "cantidad": 1,
+                "precio_unitario": 355.66
+            },
+            {
+                "id_producto": 38,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 38",
+                "cantidad": 1,
+                "precio_unitario": 1111.49
+            }
+        ],
+        "fecha_pedido": "2024-05-31",
+        "estado": "Enviado",
+        "total_pedido": 2511.58
+    },
+    {
+        "id_pedido": 116,
+        "id_cliente": 54,
+        "productos": [
+            {
+                "id_producto": 69,
+                "nombre": "Silla ergonómica de oficina Modelo 69",
+                "cantidad": 1,
+                "precio_unitario": 332.56
+            }
+        ],
+        "fecha_pedido": "2024-03-29",
+        "estado": "Entregado",
+        "total_pedido": 332.56
+    },
+    {
+        "id_pedido": 117,
+        "id_cliente": 15,
+        "productos": [
+            {
+                "id_producto": 39,
+                "nombre": "Cafetera Nespresso Modelo 39",
+                "cantidad": 3,
+                "precio_unitario": 213.26
+            }
+        ],
+        "fecha_pedido": "2024-03-05",
+        "estado": "Enviado",
+        "total_pedido": 639.78
+    },
+    {
+        "id_pedido": 118,
+        "id_cliente": 34,
+        "productos": [
+            {
+                "id_producto": 25,
+                "nombre": "Apple iPad Pro 11 Modelo 25",
+                "cantidad": 3,
+                "precio_unitario": 1043.92
+            },
+            {
+                "id_producto": 13,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 13",
+                "cantidad": 2,
+                "precio_unitario": 1108.87
+            }
+        ],
+        "fecha_pedido": "2024-02-29",
+        "estado": "Enviado",
+        "total_pedido": 5349.5
+    },
+    {
+        "id_pedido": 119,
+        "id_cliente": 50,
+        "productos": [
+            {
+                "id_producto": 47,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 47",
+                "cantidad": 1,
+                "precio_unitario": 712.1
+            },
+            {
+                "id_producto": 72,
+                "nombre": "Apple iPad Pro 11 Modelo 72",
+                "cantidad": 1,
+                "precio_unitario": 863.99
+            },
+            {
+                "id_producto": 95,
+                "nombre": "Silla ergonómica de oficina Modelo 95",
+                "cantidad": 3,
+                "precio_unitario": 355.66
+            }
+        ],
+        "fecha_pedido": "2024-01-20",
+        "estado": "Procesando",
+        "total_pedido": 2643.07
+    },
+    {
+        "id_pedido": 120,
+        "id_cliente": 52,
+        "productos": [
+            {
+                "id_producto": 50,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 50",
+                "cantidad": 2,
+                "precio_unitario": 880.29
+            }
+        ],
+        "fecha_pedido": "2024-03-27",
+        "estado": "Entregado",
+        "total_pedido": 1760.58
+    },
+    {
+        "id_pedido": 121,
+        "id_cliente": 33,
+        "productos": [
+            {
+                "id_producto": 32,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 32",
+                "cantidad": 2,
+                "precio_unitario": 283.35
+            }
+        ],
+        "fecha_pedido": "2024-03-02",
+        "estado": "Enviado",
+        "total_pedido": 566.7
+    },
+    {
+        "id_pedido": 122,
+        "id_cliente": 83,
+        "productos": [
+            {
+                "id_producto": 41,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 41",
+                "cantidad": 3,
+                "precio_unitario": 326.16
+            },
+            {
+                "id_producto": 81,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 81",
+                "cantidad": 2,
+                "precio_unitario": 843.05
+            },
+            {
+                "id_producto": 68,
+                "nombre": "Apple iPad Pro 11 Modelo 68",
+                "cantidad": 3,
+                "precio_unitario": 997.2
+            }
+        ],
+        "fecha_pedido": "2024-05-12",
+        "estado": "Enviado",
+        "total_pedido": 5656.18
+    },
+    {
+        "id_pedido": 123,
+        "id_cliente": 95,
+        "productos": [
+            {
+                "id_producto": 16,
+                "nombre": "Silla ergonómica de oficina Modelo 16",
+                "cantidad": 1,
+                "precio_unitario": 370.74
+            },
+            {
+                "id_producto": 32,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 32",
+                "cantidad": 3,
+                "precio_unitario": 283.35
+            }
+        ],
+        "fecha_pedido": "2024-04-06",
+        "estado": "Procesando",
+        "total_pedido": 1220.79
+    },
+    {
+        "id_pedido": 124,
+        "id_cliente": 20,
+        "productos": [
+            {
+                "id_producto": 59,
+                "nombre": "Apple iPad Pro 11 Modelo 59",
+                "cantidad": 2,
+                "precio_unitario": 854.51
+            },
+            {
+                "id_producto": 52,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 52",
+                "cantidad": 2,
+                "precio_unitario": 1082.14
+            }
+        ],
+        "fecha_pedido": "2024-03-21",
+        "estado": "Enviado",
+        "total_pedido": 3873.3
+    },
+    {
+        "id_pedido": 125,
+        "id_cliente": 71,
+        "productos": [
+            {
+                "id_producto": 95,
+                "nombre": "Silla ergonómica de oficina Modelo 95",
+                "cantidad": 3,
+                "precio_unitario": 355.66
+            }
+        ],
+        "fecha_pedido": "2024-01-17",
+        "estado": "Enviado",
+        "total_pedido": 1066.98
+    },
+    {
+        "id_pedido": 126,
+        "id_cliente": 86,
+        "productos": [
+            {
+                "id_producto": 72,
+                "nombre": "Apple iPad Pro 11 Modelo 72",
+                "cantidad": 1,
+                "precio_unitario": 863.99
+            },
+            {
+                "id_producto": 51,
+                "nombre": "Silla ergonómica de oficina Modelo 51",
+                "cantidad": 3,
+                "precio_unitario": 319.86
+            }
+        ],
+        "fecha_pedido": "2024-01-17",
+        "estado": "Procesando",
+        "total_pedido": 1823.57
+    },
+    {
+        "id_pedido": 127,
+        "id_cliente": 71,
+        "productos": [
+            {
+                "id_producto": 99,
+                "nombre": "Apple iPad Pro 11 Modelo 99",
+                "cantidad": 3,
+                "precio_unitario": 880.83
+            },
+            {
+                "id_producto": 14,
+                "nombre": "Silla ergonómica de oficina Modelo 14",
+                "cantidad": 2,
+                "precio_unitario": 353.44
+            },
+            {
+                "id_producto": 87,
+                "nombre": "Apple iPad Pro 11 Modelo 87",
+                "cantidad": 2,
+                "precio_unitario": 1174.09
+            }
+        ],
+        "fecha_pedido": "2024-03-26",
+        "estado": "Procesando",
+        "total_pedido": 5697.55
+    },
+    {
+        "id_pedido": 128,
+        "id_cliente": 20,
+        "productos": [
+            {
+                "id_producto": 24,
+                "nombre": "Laptop HP Envy Modelo 24",
+                "cantidad": 1,
+                "precio_unitario": 1122.09
+            },
+            {
+                "id_producto": 61,
+                "nombre": "Silla ergonómica de oficina Modelo 61",
+                "cantidad": 3,
+                "precio_unitario": 310.53
+            }
+        ],
+        "fecha_pedido": "2024-05-04",
+        "estado": "Cancelado",
+        "total_pedido": 2053.68
+    },
+    {
+        "id_pedido": 129,
+        "id_cliente": 76,
+        "productos": [
+            {
+                "id_producto": 1,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 1",
+                "cantidad": 3,
+                "precio_unitario": 415.22
+            }
+        ],
+        "fecha_pedido": "2024-01-25",
+        "estado": "Procesando",
+        "total_pedido": 1245.66
+    },
+    {
+        "id_pedido": 130,
+        "id_cliente": 48,
+        "productos": [
+            {
+                "id_producto": 83,
+                "nombre": "Cafetera Nespresso Modelo 83",
+                "cantidad": 1,
+                "precio_unitario": 158.0
+            },
+            {
+                "id_producto": 28,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 28",
+                "cantidad": 3,
+                "precio_unitario": 824.9
+            }
+        ],
+        "fecha_pedido": "2024-04-21",
+        "estado": "Procesando",
+        "total_pedido": 2632.7
+    },
+    {
+        "id_pedido": 131,
+        "id_cliente": 86,
+        "productos": [
+            {
+                "id_producto": 60,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 60",
+                "cantidad": 3,
+                "precio_unitario": 354.3
+            },
+            {
+                "id_producto": 15,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 15",
+                "cantidad": 1,
+                "precio_unitario": 608.02
+            },
+            {
+                "id_producto": 15,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 15",
+                "cantidad": 1,
+                "precio_unitario": 608.02
+            }
+        ],
+        "fecha_pedido": "2024-05-05",
+        "estado": "Enviado",
+        "total_pedido": 2278.94
+    },
+    {
+        "id_pedido": 132,
+        "id_cliente": 1,
+        "productos": [
+            {
+                "id_producto": 34,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 34",
+                "cantidad": 2,
+                "precio_unitario": 1066.41
+            }
+        ],
+        "fecha_pedido": "2024-06-24",
+        "estado": "Cancelado",
+        "total_pedido": 2132.82
+    },
+    {
+        "id_pedido": 133,
+        "id_cliente": 33,
+        "productos": [
+            {
+                "id_producto": 36,
+                "nombre": "Laptop HP Envy Modelo 36",
+                "cantidad": 3,
+                "precio_unitario": 1031.54
+            }
+        ],
+        "fecha_pedido": "2024-01-16",
+        "estado": "Cancelado",
+        "total_pedido": 3094.62
+    },
+    {
+        "id_pedido": 134,
+        "id_cliente": 67,
+        "productos": [
+            {
+                "id_producto": 48,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 48",
+                "cantidad": 2,
+                "precio_unitario": 986.28
+            },
+            {
+                "id_producto": 90,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 90",
+                "cantidad": 2,
+                "precio_unitario": 842.91
+            }
+        ],
+        "fecha_pedido": "2024-03-16",
+        "estado": "Enviado",
+        "total_pedido": 3658.38
+    },
+    {
+        "id_pedido": 135,
+        "id_cliente": 52,
+        "productos": [
+            {
+                "id_producto": 80,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 80",
+                "cantidad": 1,
+                "precio_unitario": 852.23
+            }
+        ],
+        "fecha_pedido": "2024-05-16",
+        "estado": "Cancelado",
+        "total_pedido": 852.23
+    },
+    {
+        "id_pedido": 136,
+        "id_cliente": 80,
+        "productos": [
+            {
+                "id_producto": 17,
+                "nombre": "Silla ergonómica de oficina Modelo 17",
+                "cantidad": 2,
+                "precio_unitario": 321.55
+            },
+            {
+                "id_producto": 33,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 33",
+                "cantidad": 1,
+                "precio_unitario": 1039.79
+            }
+        ],
+        "fecha_pedido": "2024-03-05",
+        "estado": "Cancelado",
+        "total_pedido": 1682.89
+    },
+    {
+        "id_pedido": 137,
+        "id_cliente": 43,
+        "productos": [
+            {
+                "id_producto": 47,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 47",
+                "cantidad": 3,
+                "precio_unitario": 712.1
+            }
+        ],
+        "fecha_pedido": "2024-03-15",
+        "estado": "Enviado",
+        "total_pedido": 2136.3
+    },
+    {
+        "id_pedido": 138,
+        "id_cliente": 71,
+        "productos": [
+            {
+                "id_producto": 1,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 1",
+                "cantidad": 1,
+                "precio_unitario": 415.22
+            },
+            {
+                "id_producto": 17,
+                "nombre": "Silla ergonómica de oficina Modelo 17",
+                "cantidad": 2,
+                "precio_unitario": 321.55
+            }
+        ],
+        "fecha_pedido": "2024-06-09",
+        "estado": "Cancelado",
+        "total_pedido": 1058.32
+    },
+    {
+        "id_pedido": 139,
+        "id_cliente": 91,
+        "productos": [
+            {
+                "id_producto": 56,
+                "nombre": "Apple iPad Pro 11 Modelo 56",
+                "cantidad": 1,
+                "precio_unitario": 906.17
+            },
+            {
+                "id_producto": 84,
+                "nombre": "Silla ergonómica de oficina Modelo 84",
+                "cantidad": 2,
+                "precio_unitario": 342.95
+            },
+            {
+                "id_producto": 68,
+                "nombre": "Apple iPad Pro 11 Modelo 68",
+                "cantidad": 1,
+                "precio_unitario": 997.2
+            }
+        ],
+        "fecha_pedido": "2024-06-05",
+        "estado": "Cancelado",
+        "total_pedido": 2589.27
+    },
+    {
+        "id_pedido": 140,
+        "id_cliente": 43,
+        "productos": [
+            {
+                "id_producto": 85,
+                "nombre": "Apple iPad Pro 11 Modelo 85",
+                "cantidad": 1,
+                "precio_unitario": 1046.2
+            },
+            {
+                "id_producto": 8,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 8",
+                "cantidad": 3,
+                "precio_unitario": 1082.51
+            }
+        ],
+        "fecha_pedido": "2024-02-04",
+        "estado": "Cancelado",
+        "total_pedido": 4293.73
+    },
+    {
+        "id_pedido": 141,
+        "id_cliente": 91,
+        "productos": [
+            {
+                "id_producto": 79,
+                "nombre": "Silla ergonómica de oficina Modelo 79",
+                "cantidad": 3,
+                "precio_unitario": 414.67
+            },
+            {
+                "id_producto": 40,
+                "nombre": "Cafetera Nespresso Modelo 40",
+                "cantidad": 1,
+                "precio_unitario": 164.05
+            }
+        ],
+        "fecha_pedido": "2024-03-31",
+        "estado": "Enviado",
+        "total_pedido": 1408.06
+    },
+    {
+        "id_pedido": 142,
+        "id_cliente": 53,
+        "productos": [
+            {
+                "id_producto": 17,
+                "nombre": "Silla ergonómica de oficina Modelo 17",
+                "cantidad": 2,
+                "precio_unitario": 321.55
+            },
+            {
+                "id_producto": 40,
+                "nombre": "Cafetera Nespresso Modelo 40",
+                "cantidad": 2,
+                "precio_unitario": 164.05
+            }
+        ],
+        "fecha_pedido": "2024-06-05",
+        "estado": "Entregado",
+        "total_pedido": 971.2
+    },
+    {
+        "id_pedido": 143,
+        "id_cliente": 63,
+        "productos": [
+            {
+                "id_producto": 34,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 34",
+                "cantidad": 3,
+                "precio_unitario": 1066.41
+            },
+            {
+                "id_producto": 74,
+                "nombre": "Apple iPad Pro 11 Modelo 74",
+                "cantidad": 2,
+                "precio_unitario": 949.06
+            },
+            {
+                "id_producto": 93,
+                "nombre": "Laptop HP Envy Modelo 93",
+                "cantidad": 2,
+                "precio_unitario": 1250.8
+            }
+        ],
+        "fecha_pedido": "2024-05-15",
+        "estado": "Procesando",
+        "total_pedido": 7598.95
+    },
+    {
+        "id_pedido": 144,
+        "id_cliente": 23,
+        "productos": [
+            {
+                "id_producto": 79,
+                "nombre": "Silla ergonómica de oficina Modelo 79",
+                "cantidad": 1,
+                "precio_unitario": 414.67
+            },
+            {
+                "id_producto": 71,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 71",
+                "cantidad": 2,
+                "precio_unitario": 951.12
+            }
+        ],
+        "fecha_pedido": "2024-01-21",
+        "estado": "Entregado",
+        "total_pedido": 2316.91
+    },
+    {
+        "id_pedido": 145,
+        "id_cliente": 8,
+        "productos": [
+            {
+                "id_producto": 21,
+                "nombre": "Cafetera Nespresso Modelo 21",
+                "cantidad": 3,
+                "precio_unitario": 184.51
+            },
+            {
+                "id_producto": 33,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 33",
+                "cantidad": 1,
+                "precio_unitario": 1039.79
+            }
+        ],
+        "fecha_pedido": "2024-03-31",
+        "estado": "Enviado",
+        "total_pedido": 1593.32
+    },
+    {
+        "id_pedido": 146,
+        "id_cliente": 66,
+        "productos": [
+            {
+                "id_producto": 100,
+                "nombre": "Cafetera Nespresso Modelo 100",
+                "cantidad": 2,
+                "precio_unitario": 176.79
+            },
+            {
+                "id_producto": 91,
+                "nombre": "Silla ergonómica de oficina Modelo 91",
+                "cantidad": 1,
+                "precio_unitario": 344.46
+            },
+            {
+                "id_producto": 43,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 43",
+                "cantidad": 2,
+                "precio_unitario": 379.21
+            }
+        ],
+        "fecha_pedido": "2024-01-03",
+        "estado": "Procesando",
+        "total_pedido": 1456.46
+    },
+    {
+        "id_pedido": 147,
+        "id_cliente": 24,
+        "productos": [
+            {
+                "id_producto": 99,
+                "nombre": "Apple iPad Pro 11 Modelo 99",
+                "cantidad": 2,
+                "precio_unitario": 880.83
+            }
+        ],
+        "fecha_pedido": "2024-05-24",
+        "estado": "Entregado",
+        "total_pedido": 1761.66
+    },
+    {
+        "id_pedido": 148,
+        "id_cliente": 20,
+        "productos": [
+            {
+                "id_producto": 48,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 48",
+                "cantidad": 3,
+                "precio_unitario": 986.28
+            },
+            {
+                "id_producto": 98,
+                "nombre": "Cafetera Nespresso Modelo 98",
+                "cantidad": 1,
+                "precio_unitario": 153.9
+            },
+            {
+                "id_producto": 26,
+                "nombre": "Silla ergonómica de oficina Modelo 26",
+                "cantidad": 2,
+                "precio_unitario": 339.65
+            }
+        ],
+        "fecha_pedido": "2024-03-04",
+        "estado": "Procesando",
+        "total_pedido": 3792.04
+    },
+    {
+        "id_pedido": 149,
+        "id_cliente": 97,
+        "productos": [
+            {
+                "id_producto": 58,
+                "nombre": "Cafetera Nespresso Modelo 58",
+                "cantidad": 1,
+                "precio_unitario": 196.6
+            },
+            {
+                "id_producto": 5,
+                "nombre": "Apple iPad Pro 11 Modelo 5",
+                "cantidad": 1,
+                "precio_unitario": 868.53
+            },
+            {
+                "id_producto": 94,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 94",
+                "cantidad": 1,
+                "precio_unitario": 743.77
+            }
+        ],
+        "fecha_pedido": "2024-03-30",
+        "estado": "Cancelado",
+        "total_pedido": 1808.9
+    },
+    {
+        "id_pedido": 150,
+        "id_cliente": 93,
+        "productos": [
+            {
+                "id_producto": 75,
+                "nombre": "Silla ergonómica de oficina Modelo 75",
+                "cantidad": 1,
+                "precio_unitario": 335.5
+            },
+            {
+                "id_producto": 44,
+                "nombre": "Apple iPad Pro 11 Modelo 44",
+                "cantidad": 1,
+                "precio_unitario": 988.77
+            },
+            {
+                "id_producto": 45,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 45",
+                "cantidad": 2,
+                "precio_unitario": 703.85
+            }
+        ],
+        "fecha_pedido": "2024-02-11",
+        "estado": "Entregado",
+        "total_pedido": 2731.97
+    },
+    {
+        "id_pedido": 151,
+        "id_cliente": 87,
+        "productos": [
+            {
+                "id_producto": 85,
+                "nombre": "Apple iPad Pro 11 Modelo 85",
+                "cantidad": 1,
+                "precio_unitario": 1046.2
+            },
+            {
+                "id_producto": 82,
+                "nombre": "Silla ergonómica de oficina Modelo 82",
+                "cantidad": 2,
+                "precio_unitario": 390.85
+            }
+        ],
+        "fecha_pedido": "2024-02-22",
+        "estado": "Entregado",
+        "total_pedido": 1827.9
+    },
+    {
+        "id_pedido": 152,
+        "id_cliente": 29,
+        "productos": [
+            {
+                "id_producto": 48,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 48",
+                "cantidad": 2,
+                "precio_unitario": 986.28
+            },
+            {
+                "id_producto": 8,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 8",
+                "cantidad": 3,
+                "precio_unitario": 1082.51
+            }
+        ],
+        "fecha_pedido": "2024-05-04",
+        "estado": "Procesando",
+        "total_pedido": 5220.09
+    },
+    {
+        "id_pedido": 153,
+        "id_cliente": 9,
+        "productos": [
+            {
+                "id_producto": 24,
+                "nombre": "Laptop HP Envy Modelo 24",
+                "cantidad": 1,
+                "precio_unitario": 1122.09
+            }
+        ],
+        "fecha_pedido": "2024-03-26",
+        "estado": "Entregado",
+        "total_pedido": 1122.09
+    },
+    {
+        "id_pedido": 154,
+        "id_cliente": 31,
+        "productos": [
+            {
+                "id_producto": 76,
+                "nombre": "Apple iPad Pro 11 Modelo 76",
+                "cantidad": 2,
+                "precio_unitario": 968.46
+            }
+        ],
+        "fecha_pedido": "2024-01-30",
+        "estado": "Enviado",
+        "total_pedido": 1936.92
+    },
+    {
+        "id_pedido": 155,
+        "id_cliente": 1,
+        "productos": [
+            {
+                "id_producto": 31,
+                "nombre": "Cafetera Nespresso Modelo 31",
+                "cantidad": 2,
+                "precio_unitario": 201.36
+            }
+        ],
+        "fecha_pedido": "2024-06-03",
+        "estado": "Cancelado",
+        "total_pedido": 402.72
+    },
+    {
+        "id_pedido": 156,
+        "id_cliente": 59,
+        "productos": [
+            {
+                "id_producto": 64,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 64",
+                "cantidad": 2,
+                "precio_unitario": 320.44
+            },
+            {
+                "id_producto": 75,
+                "nombre": "Silla ergonómica de oficina Modelo 75",
+                "cantidad": 3,
+                "precio_unitario": 335.5
+            }
+        ],
+        "fecha_pedido": "2024-06-18",
+        "estado": "Procesando",
+        "total_pedido": 1647.38
+    },
+    {
+        "id_pedido": 157,
+        "id_cliente": 88,
+        "productos": [
+            {
+                "id_producto": 94,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 94",
+                "cantidad": 2,
+                "precio_unitario": 743.77
+            },
+            {
+                "id_producto": 74,
+                "nombre": "Apple iPad Pro 11 Modelo 74",
+                "cantidad": 1,
+                "precio_unitario": 949.06
+            },
+            {
+                "id_producto": 43,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 43",
+                "cantidad": 1,
+                "precio_unitario": 379.21
+            }
+        ],
+        "fecha_pedido": "2024-05-13",
+        "estado": "Entregado",
+        "total_pedido": 2815.81
+    },
+    {
+        "id_pedido": 158,
+        "id_cliente": 3,
+        "productos": [
+            {
+                "id_producto": 40,
+                "nombre": "Cafetera Nespresso Modelo 40",
+                "cantidad": 1,
+                "precio_unitario": 164.05
+            }
+        ],
+        "fecha_pedido": "2024-03-23",
+        "estado": "Cancelado",
+        "total_pedido": 164.05
+    },
+    {
+        "id_pedido": 159,
+        "id_cliente": 18,
+        "productos": [
+            {
+                "id_producto": 27,
+                "nombre": "Silla ergonómica de oficina Modelo 27",
+                "cantidad": 3,
+                "precio_unitario": 377.91
+            },
+            {
+                "id_producto": 69,
+                "nombre": "Silla ergonómica de oficina Modelo 69",
+                "cantidad": 1,
+                "precio_unitario": 332.56
+            },
+            {
+                "id_producto": 17,
+                "nombre": "Silla ergonómica de oficina Modelo 17",
+                "cantidad": 1,
+                "precio_unitario": 321.55
+            }
+        ],
+        "fecha_pedido": "2024-04-25",
+        "estado": "Procesando",
+        "total_pedido": 1787.84
+    },
+    {
+        "id_pedido": 160,
+        "id_cliente": 63,
+        "productos": [
+            {
+                "id_producto": 25,
+                "nombre": "Apple iPad Pro 11 Modelo 25",
+                "cantidad": 1,
+                "precio_unitario": 1043.92
+            }
+        ],
+        "fecha_pedido": "2024-06-17",
+        "estado": "Entregado",
+        "total_pedido": 1043.92
+    },
+    {
+        "id_pedido": 161,
+        "id_cliente": 14,
+        "productos": [
+            {
+                "id_producto": 96,
+                "nombre": "Laptop HP Envy Modelo 96",
+                "cantidad": 2,
+                "precio_unitario": 1260.67
+            }
+        ],
+        "fecha_pedido": "2024-06-21",
+        "estado": "Cancelado",
+        "total_pedido": 2521.34
+    },
+    {
+        "id_pedido": 162,
+        "id_cliente": 15,
+        "productos": [
+            {
+                "id_producto": 100,
+                "nombre": "Cafetera Nespresso Modelo 100",
+                "cantidad": 3,
+                "precio_unitario": 176.79
+            },
+            {
+                "id_producto": 16,
+                "nombre": "Silla ergonómica de oficina Modelo 16",
+                "cantidad": 3,
+                "precio_unitario": 370.74
+            },
+            {
+                "id_producto": 65,
+                "nombre": "Apple iPad Pro 11 Modelo 65",
+                "cantidad": 1,
+                "precio_unitario": 991.37
+            }
+        ],
+        "fecha_pedido": "2024-02-20",
+        "estado": "Entregado",
+        "total_pedido": 2633.96
+    },
+    {
+        "id_pedido": 163,
+        "id_cliente": 19,
+        "productos": [
+            {
+                "id_producto": 95,
+                "nombre": "Silla ergonómica de oficina Modelo 95",
+                "cantidad": 2,
+                "precio_unitario": 355.66
+            },
+            {
+                "id_producto": 57,
+                "nombre": "Apple iPad Pro 11 Modelo 57",
+                "cantidad": 3,
+                "precio_unitario": 1009.14
+            },
+            {
+                "id_producto": 84,
+                "nombre": "Silla ergonómica de oficina Modelo 84",
+                "cantidad": 2,
+                "precio_unitario": 342.95
+            }
+        ],
+        "fecha_pedido": "2024-01-17",
+        "estado": "Cancelado",
+        "total_pedido": 4424.64
+    },
+    {
+        "id_pedido": 164,
+        "id_cliente": 65,
+        "productos": [
+            {
+                "id_producto": 54,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 54",
+                "cantidad": 1,
+                "precio_unitario": 297.16
+            }
+        ],
+        "fecha_pedido": "2024-02-21",
+        "estado": "Enviado",
+        "total_pedido": 297.16
+    },
+    {
+        "id_pedido": 165,
+        "id_cliente": 17,
+        "productos": [
+            {
+                "id_producto": 81,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 81",
+                "cantidad": 1,
+                "precio_unitario": 843.05
+            },
+            {
+                "id_producto": 55,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 55",
+                "cantidad": 3,
+                "precio_unitario": 290.69
+            }
+        ],
+        "fecha_pedido": "2024-04-04",
+        "estado": "Cancelado",
+        "total_pedido": 1715.12
+    },
+    {
+        "id_pedido": 166,
+        "id_cliente": 55,
+        "productos": [
+            {
+                "id_producto": 1,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 1",
+                "cantidad": 1,
+                "precio_unitario": 415.22
+            },
+            {
+                "id_producto": 18,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 18",
+                "cantidad": 2,
+                "precio_unitario": 280.48
+            },
+            {
+                "id_producto": 27,
+                "nombre": "Silla ergonómica de oficina Modelo 27",
+                "cantidad": 3,
+                "precio_unitario": 377.91
+            }
+        ],
+        "fecha_pedido": "2024-04-05",
+        "estado": "Entregado",
+        "total_pedido": 2109.91
+    },
+    {
+        "id_pedido": 167,
+        "id_cliente": 78,
+        "productos": [
+            {
+                "id_producto": 85,
+                "nombre": "Apple iPad Pro 11 Modelo 85",
+                "cantidad": 2,
+                "precio_unitario": 1046.2
+            },
+            {
+                "id_producto": 98,
+                "nombre": "Cafetera Nespresso Modelo 98",
+                "cantidad": 3,
+                "precio_unitario": 153.9
+            },
+            {
+                "id_producto": 41,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 41",
+                "cantidad": 2,
+                "precio_unitario": 326.16
+            }
+        ],
+        "fecha_pedido": "2024-02-09",
+        "estado": "Enviado",
+        "total_pedido": 3206.42
+    },
+    {
+        "id_pedido": 168,
+        "id_cliente": 93,
+        "productos": [
+            {
+                "id_producto": 25,
+                "nombre": "Apple iPad Pro 11 Modelo 25",
+                "cantidad": 3,
+                "precio_unitario": 1043.92
+            },
+            {
+                "id_producto": 58,
+                "nombre": "Cafetera Nespresso Modelo 58",
+                "cantidad": 3,
+                "precio_unitario": 196.6
+            },
+            {
+                "id_producto": 76,
+                "nombre": "Apple iPad Pro 11 Modelo 76",
+                "cantidad": 2,
+                "precio_unitario": 968.46
+            }
+        ],
+        "fecha_pedido": "2024-06-05",
+        "estado": "Cancelado",
+        "total_pedido": 5658.48
+    },
+    {
+        "id_pedido": 169,
+        "id_cliente": 32,
+        "productos": [
+            {
+                "id_producto": 10,
+                "nombre": "Apple iPad Pro 11 Modelo 10",
+                "cantidad": 3,
+                "precio_unitario": 913.09
+            }
+        ],
+        "fecha_pedido": "2024-06-08",
+        "estado": "Enviado",
+        "total_pedido": 2739.27
+    },
+    {
+        "id_pedido": 170,
+        "id_cliente": 79,
+        "productos": [
+            {
+                "id_producto": 44,
+                "nombre": "Apple iPad Pro 11 Modelo 44",
+                "cantidad": 2,
+                "precio_unitario": 988.77
+            },
+            {
+                "id_producto": 78,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 78",
+                "cantidad": 3,
+                "precio_unitario": 719.11
+            },
+            {
+                "id_producto": 85,
+                "nombre": "Apple iPad Pro 11 Modelo 85",
+                "cantidad": 3,
+                "precio_unitario": 1046.2
+            }
+        ],
+        "fecha_pedido": "2024-02-12",
+        "estado": "Cancelado",
+        "total_pedido": 7273.47
+    },
+    {
+        "id_pedido": 171,
+        "id_cliente": 77,
+        "productos": [
+            {
+                "id_producto": 10,
+                "nombre": "Apple iPad Pro 11 Modelo 10",
+                "cantidad": 1,
+                "precio_unitario": 913.09
+            }
+        ],
+        "fecha_pedido": "2024-01-30",
+        "estado": "Procesando",
+        "total_pedido": 913.09
+    },
+    {
+        "id_pedido": 172,
+        "id_cliente": 74,
+        "productos": [
+            {
+                "id_producto": 58,
+                "nombre": "Cafetera Nespresso Modelo 58",
+                "cantidad": 1,
+                "precio_unitario": 196.6
+            }
+        ],
+        "fecha_pedido": "2024-02-17",
+        "estado": "Cancelado",
+        "total_pedido": 196.6
+    },
+    {
+        "id_pedido": 173,
+        "id_cliente": 39,
+        "productos": [
+            {
+                "id_producto": 27,
+                "nombre": "Silla ergonómica de oficina Modelo 27",
+                "cantidad": 2,
+                "precio_unitario": 377.91
+            },
+            {
+                "id_producto": 44,
+                "nombre": "Apple iPad Pro 11 Modelo 44",
+                "cantidad": 3,
+                "precio_unitario": 988.77
+            },
+            {
+                "id_producto": 11,
+                "nombre": "Apple iPad Pro 11 Modelo 11",
+                "cantidad": 3,
+                "precio_unitario": 1174.11
+            }
+        ],
+        "fecha_pedido": "2024-02-20",
+        "estado": "Enviado",
+        "total_pedido": 7244.46
+    },
+    {
+        "id_pedido": 174,
+        "id_cliente": 21,
+        "productos": [
+            {
+                "id_producto": 81,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 81",
+                "cantidad": 1,
+                "precio_unitario": 843.05
+            },
+            {
+                "id_producto": 38,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 38",
+                "cantidad": 2,
+                "precio_unitario": 1111.49
+            }
+        ],
+        "fecha_pedido": "2024-04-12",
+        "estado": "Cancelado",
+        "total_pedido": 3066.03
+    },
+    {
+        "id_pedido": 175,
+        "id_cliente": 8,
+        "productos": [
+            {
+                "id_producto": 32,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 32",
+                "cantidad": 3,
+                "precio_unitario": 283.35
+            },
+            {
+                "id_producto": 29,
+                "nombre": "Apple iPad Pro 11 Modelo 29",
+                "cantidad": 3,
+                "precio_unitario": 1129.98
+            }
+        ],
+        "fecha_pedido": "2024-05-18",
+        "estado": "Enviado",
+        "total_pedido": 4239.99
+    },
+    {
+        "id_pedido": 176,
+        "id_cliente": 71,
+        "productos": [
+            {
+                "id_producto": 51,
+                "nombre": "Silla ergonómica de oficina Modelo 51",
+                "cantidad": 3,
+                "precio_unitario": 319.86
+            }
+        ],
+        "fecha_pedido": "2024-04-29",
+        "estado": "Entregado",
+        "total_pedido": 959.58
+    },
+    {
+        "id_pedido": 177,
+        "id_cliente": 25,
+        "productos": [
+            {
+                "id_producto": 78,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 78",
+                "cantidad": 3,
+                "precio_unitario": 719.11
+            }
+        ],
+        "fecha_pedido": "2024-04-08",
+        "estado": "Procesando",
+        "total_pedido": 2157.33
+    },
+    {
+        "id_pedido": 178,
+        "id_cliente": 36,
+        "productos": [
+            {
+                "id_producto": 20,
+                "nombre": "Apple iPad Pro 11 Modelo 20",
+                "cantidad": 1,
+                "precio_unitario": 891.65
+            }
+        ],
+        "fecha_pedido": "2024-06-03",
+        "estado": "Procesando",
+        "total_pedido": 891.65
+    },
+    {
+        "id_pedido": 179,
+        "id_cliente": 32,
+        "productos": [
+            {
+                "id_producto": 71,
+                "nombre": "Teléfono Samsung Galaxy S21 Modelo 71",
+                "cantidad": 2,
+                "precio_unitario": 951.12
+            },
+            {
+                "id_producto": 16,
+                "nombre": "Silla ergonómica de oficina Modelo 16",
+                "cantidad": 2,
+                "precio_unitario": 370.74
+            }
+        ],
+        "fecha_pedido": "2024-03-04",
+        "estado": "Enviado",
+        "total_pedido": 2643.72
+    },
+    {
+        "id_pedido": 180,
+        "id_cliente": 97,
+        "productos": [
+            {
+                "id_producto": 16,
+                "nombre": "Silla ergonómica de oficina Modelo 16",
+                "cantidad": 1,
+                "precio_unitario": 370.74
+            }
+        ],
+        "fecha_pedido": "2024-04-08",
+        "estado": "Enviado",
+        "total_pedido": 370.74
+    },
+    {
+        "id_pedido": 181,
+        "id_cliente": 11,
+        "productos": [
+            {
+                "id_producto": 12,
+                "nombre": "Cafetera Nespresso Modelo 12",
+                "cantidad": 1,
+                "precio_unitario": 211.43
+            },
+            {
+                "id_producto": 90,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 90",
+                "cantidad": 2,
+                "precio_unitario": 842.91
+            }
+        ],
+        "fecha_pedido": "2024-01-13",
+        "estado": "Enviado",
+        "total_pedido": 1897.25
+    },
+    {
+        "id_pedido": 182,
+        "id_cliente": 43,
+        "productos": [
+            {
+                "id_producto": 31,
+                "nombre": "Cafetera Nespresso Modelo 31",
+                "cantidad": 1,
+                "precio_unitario": 201.36
+            }
+        ],
+        "fecha_pedido": "2024-03-09",
+        "estado": "Procesando",
+        "total_pedido": 201.36
+    },
+    {
+        "id_pedido": 183,
+        "id_cliente": 70,
+        "productos": [
+            {
+                "id_producto": 9,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 9",
+                "cantidad": 1,
+                "precio_unitario": 867.58
+            },
+            {
+                "id_producto": 10,
+                "nombre": "Apple iPad Pro 11 Modelo 10",
+                "cantidad": 3,
+                "precio_unitario": 913.09
+            },
+            {
+                "id_producto": 47,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 47",
+                "cantidad": 1,
+                "precio_unitario": 712.1
+            }
+        ],
+        "fecha_pedido": "2024-01-26",
+        "estado": "Enviado",
+        "total_pedido": 4318.95
+    },
+    {
+        "id_pedido": 184,
+        "id_cliente": 89,
+        "productos": [
+            {
+                "id_producto": 21,
+                "nombre": "Cafetera Nespresso Modelo 21",
+                "cantidad": 3,
+                "precio_unitario": 184.51
+            },
+            {
+                "id_producto": 58,
+                "nombre": "Cafetera Nespresso Modelo 58",
+                "cantidad": 3,
+                "precio_unitario": 196.6
+            }
+        ],
+        "fecha_pedido": "2024-05-31",
+        "estado": "Procesando",
+        "total_pedido": 1143.33
+    },
+    {
+        "id_pedido": 185,
+        "id_cliente": 21,
+        "productos": [
+            {
+                "id_producto": 64,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 64",
+                "cantidad": 2,
+                "precio_unitario": 320.44
+            },
+            {
+                "id_producto": 54,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 54",
+                "cantidad": 3,
+                "precio_unitario": 297.16
+            }
+        ],
+        "fecha_pedido": "2024-03-28",
+        "estado": "Procesando",
+        "total_pedido": 1532.36
+    },
+    {
+        "id_pedido": 186,
+        "id_cliente": 91,
+        "productos": [
+            {
+                "id_producto": 70,
+                "nombre": "Auriculares Sony WH-1000XM4 Modelo 70",
+                "cantidad": 1,
+                "precio_unitario": 418.5
+            }
+        ],
+        "fecha_pedido": "2024-05-01",
+        "estado": "Entregado",
+        "total_pedido": 418.5
+    },
+    {
+        "id_pedido": 187,
+        "id_cliente": 4,
+        "productos": [
+            {
+                "id_producto": 47,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 47",
+                "cantidad": 1,
+                "precio_unitario": 712.1
+            }
+        ],
+        "fecha_pedido": "2024-06-18",
+        "estado": "Procesando",
+        "total_pedido": 712.1
+    },
+    {
+        "id_pedido": 188,
+        "id_cliente": 53,
+        "productos": [
+            {
+                "id_producto": 22,
+                "nombre": "Apple iPad Pro 11 Modelo 22",
+                "cantidad": 3,
+                "precio_unitario": 1044.43
+            }
+        ],
+        "fecha_pedido": "2024-02-05",
+        "estado": "Entregado",
+        "total_pedido": 3133.29
+    },
+    {
+        "id_pedido": 189,
+        "id_cliente": 76,
+        "productos": [
+            {
+                "id_producto": 78,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 78",
+                "cantidad": 3,
+                "precio_unitario": 719.11
+            },
+            {
+                "id_producto": 36,
+                "nombre": "Laptop HP Envy Modelo 36",
+                "cantidad": 2,
+                "precio_unitario": 1031.54
+            },
+            {
+                "id_producto": 84,
+                "nombre": "Silla ergonómica de oficina Modelo 84",
+                "cantidad": 3,
+                "precio_unitario": 342.95
+            }
+        ],
+        "fecha_pedido": "2024-04-23",
+        "estado": "Cancelado",
+        "total_pedido": 5249.26
+    },
+    {
+        "id_pedido": 190,
+        "id_cliente": 22,
+        "productos": [
+            {
+                "id_producto": 30,
+                "nombre": "Cafetera Nespresso Modelo 30",
+                "cantidad": 2,
+                "precio_unitario": 212.98
+            }
+        ],
+        "fecha_pedido": "2024-05-13",
+        "estado": "Cancelado",
+        "total_pedido": 425.96
+    },
+    {
+        "id_pedido": 191,
+        "id_cliente": 59,
+        "productos": [
+            {
+                "id_producto": 49,
+                "nombre": "Cafetera Nespresso Modelo 49",
+                "cantidad": 2,
+                "precio_unitario": 188.68
+            },
+            {
+                "id_producto": 100,
+                "nombre": "Cafetera Nespresso Modelo 100",
+                "cantidad": 1,
+                "precio_unitario": 176.79
+            },
+            {
+                "id_producto": 45,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 45",
+                "cantidad": 1,
+                "precio_unitario": 703.85
+            }
+        ],
+        "fecha_pedido": "2024-04-07",
+        "estado": "Procesando",
+        "total_pedido": 1258.0
+    },
+    {
+        "id_pedido": 192,
+        "id_cliente": 31,
+        "productos": [
+            {
+                "id_producto": 57,
+                "nombre": "Apple iPad Pro 11 Modelo 57",
+                "cantidad": 2,
+                "precio_unitario": 1009.14
+            },
+            {
+                "id_producto": 40,
+                "nombre": "Cafetera Nespresso Modelo 40",
+                "cantidad": 2,
+                "precio_unitario": 164.05
+            },
+            {
+                "id_producto": 49,
+                "nombre": "Cafetera Nespresso Modelo 49",
+                "cantidad": 2,
+                "precio_unitario": 188.68
+            }
+        ],
+        "fecha_pedido": "2024-04-07",
+        "estado": "Enviado",
+        "total_pedido": 2723.74
+    },
+    {
+        "id_pedido": 193,
+        "id_cliente": 86,
+        "productos": [
+            {
+                "id_producto": 88,
+                "nombre": "Apple iPad Pro 11 Modelo 88",
+                "cantidad": 2,
+                "precio_unitario": 995.96
+            }
+        ],
+        "fecha_pedido": "2024-06-06",
+        "estado": "Enviado",
+        "total_pedido": 1991.92
+    },
+    {
+        "id_pedido": 194,
+        "id_cliente": 9,
+        "productos": [
+            {
+                "id_producto": 85,
+                "nombre": "Apple iPad Pro 11 Modelo 85",
+                "cantidad": 1,
+                "precio_unitario": 1046.2
+            }
+        ],
+        "fecha_pedido": "2024-06-19",
+        "estado": "Cancelado",
+        "total_pedido": 1046.2
+    },
+    {
+        "id_pedido": 195,
+        "id_cliente": 54,
+        "productos": [
+            {
+                "id_producto": 16,
+                "nombre": "Silla ergonómica de oficina Modelo 16",
+                "cantidad": 2,
+                "precio_unitario": 370.74
+            },
+            {
+                "id_producto": 23,
+                "nombre": "Laptop HP Envy Modelo 23",
+                "cantidad": 3,
+                "precio_unitario": 1202.7
+            },
+            {
+                "id_producto": 22,
+                "nombre": "Apple iPad Pro 11 Modelo 22",
+                "cantidad": 2,
+                "precio_unitario": 1044.43
+            }
+        ],
+        "fecha_pedido": "2024-06-23",
+        "estado": "Enviado",
+        "total_pedido": 6438.44
+    },
+    {
+        "id_pedido": 196,
+        "id_cliente": 46,
+        "productos": [
+            {
+                "id_producto": 72,
+                "nombre": "Apple iPad Pro 11 Modelo 72",
+                "cantidad": 2,
+                "precio_unitario": 863.99
+            }
+        ],
+        "fecha_pedido": "2024-05-28",
+        "estado": "Entregado",
+        "total_pedido": 1727.98
+    },
+    {
+        "id_pedido": 197,
+        "id_cliente": 12,
+        "productos": [
+            {
+                "id_producto": 44,
+                "nombre": "Apple iPad Pro 11 Modelo 44",
+                "cantidad": 2,
+                "precio_unitario": 988.77
+            },
+            {
+                "id_producto": 78,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 78",
+                "cantidad": 2,
+                "precio_unitario": 719.11
+            },
+            {
+                "id_producto": 15,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 15",
+                "cantidad": 1,
+                "precio_unitario": 608.02
+            }
+        ],
+        "fecha_pedido": "2024-03-18",
+        "estado": "Cancelado",
+        "total_pedido": 4023.78
+    },
+    {
+        "id_pedido": 198,
+        "id_cliente": 17,
+        "productos": [
+            {
+                "id_producto": 9,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 9",
+                "cantidad": 2,
+                "precio_unitario": 867.58
+            },
+            {
+                "id_producto": 86,
+                "nombre": "Silla ergonómica de oficina Modelo 86",
+                "cantidad": 1,
+                "precio_unitario": 315.49
+            },
+            {
+                "id_producto": 53,
+                "nombre": "Cafetera Nespresso Modelo 53",
+                "cantidad": 3,
+                "precio_unitario": 202.34
+            }
+        ],
+        "fecha_pedido": "2024-01-05",
+        "estado": "Cancelado",
+        "total_pedido": 2657.67
+    },
+    {
+        "id_pedido": 199,
+        "id_cliente": 86,
+        "productos": [
+            {
+                "id_producto": 88,
+                "nombre": "Apple iPad Pro 11 Modelo 88",
+                "cantidad": 2,
+                "precio_unitario": 995.96
+            },
+            {
+                "id_producto": 100,
+                "nombre": "Cafetera Nespresso Modelo 100",
+                "cantidad": 1,
+                "precio_unitario": 176.79
+            },
+            {
+                "id_producto": 50,
+                "nombre": "Televisor LG 55 pulgadas 4K Modelo 50",
+                "cantidad": 1,
+                "precio_unitario": 880.29
+            }
+        ],
+        "fecha_pedido": "2024-01-08",
+        "estado": "Enviado",
+        "total_pedido": 3049.0
+    }
+]
