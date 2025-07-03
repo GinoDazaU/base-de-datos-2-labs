@@ -52,4 +52,4 @@ for i in range(total_records):
     if i % 1000 == 0:
         print(f"{i} registros insertados...")
 
-print("✅ Inserción completada.")
+print("Inserción funciona.")
