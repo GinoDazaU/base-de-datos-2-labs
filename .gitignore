@@ -5,3 +5,5 @@
 *venv
 .env
 lab14/data/*
+lab14/drake_lyrics/*
+lab14/milei_news/*
