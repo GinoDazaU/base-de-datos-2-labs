@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  cassandra1:
+    image: cassandra:4.1
+    container_name: cassandra1
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=IoTCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+
+  cassandra2:
+    image: cassandra:4.1
+    container_name: cassandra2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=IoTCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra2
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+
+  cassandra3:
+    image: cassandra:4.1
+    container_name: cassandra3
+    environment:
+      - CASSANDRA_CLUSTER_NAME=IoTCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra3
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
