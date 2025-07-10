@@ -32,3 +32,8 @@ def update_quantity(user_id, product_id):
 def clear_cart(user_id):
     cart_service.clear_cart(user_id)
     return jsonify({'message': 'Carrito limpiado'})
+
+@cart_bp.route('/stats/top-products', methods=['GET'])
+def top_products():
+    top = cart_service.get_top_products()
+    return jsonify(top)
